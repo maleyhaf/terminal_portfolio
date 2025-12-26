@@ -35,6 +35,6 @@ const commands = [
       "JavaScript, TypeScript, React, Node.js, CSS, HTML",
     ],
   },
-] as const;
+];
 
 export default commands;

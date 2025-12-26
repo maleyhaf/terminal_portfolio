@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useState, useRef} from "react";
-import { motion } from "framer-motion";
-
+import { useEffect, useState, useRef } from "react";
 import commands from "../data/commands";
 
-/* Typing effect */
+/* ---------- Types ---------- */
+
+type HistoryItem = {
+  command: string;
+  output: string[];
+};
+
 type TypingProps = {
   text: string;
   startType: boolean;
@@ -13,6 +17,8 @@ type TypingProps = {
   cursorDelayAfterDone?: number;
   onTypingComplete?: () => void;
 };
+
+/* ---------- Typing Effect ---------- */
 
 function TypingWithCursor({
   text,
@@ -23,13 +29,12 @@ function TypingWithCursor({
 }: TypingProps) {
   const [count, setCount] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
-
-  const completedRef = useRef(false); // 🔑
+  const completedRef = useRef(false);
 
   useEffect(() => {
     if (!startType) return;
 
-    completedRef.current = false; // reset for this run
+    completedRef.current = false;
     setCount(0);
     setShowCursor(true);
 
@@ -39,7 +44,7 @@ function TypingWithCursor({
           clearInterval(interval);
 
           if (!completedRef.current) {
-            completedRef.current = true; // lock
+            completedRef.current = true;
             setTimeout(() => {
               setShowCursor(false);
               onTypingComplete?.();
@@ -53,7 +58,7 @@ function TypingWithCursor({
     }, charDelay);
 
     return () => clearInterval(interval);
-  }, [startType, text]);
+  }, [startType, text, charDelay, cursorDelayAfterDone, onTypingComplete]);
 
   return (
     <span className="whitespace-nowrap">
@@ -63,41 +68,37 @@ function TypingWithCursor({
   );
 }
 
-/* Home page */
+/* ---------- Home ---------- */
+
 export default function Home() {
-  const [currentCommand, setCurrentCommand] = useState(0);
-  const [linesVisible, setLinesVisible] = useState<number[]>(commands.map(() => 0));
-  const [startTyping, setStartTyping] = useState(false);
+  const [terminalReady, setTerminalReady] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [input, setInput] = useState("");
 
-  const [typedCommands, setTypedCommands] = useState<boolean[]>(
-    commands.map(() => false)
-  );
+  /* ---------- Command handling ---------- */
 
-  useEffect(() => setStartTyping(true), []);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
 
-  const handleTypingComplete = (index: number) => {
-    setTypedCommands((prev) =>
-      prev.map((v, i) => (i === index ? true : v))
+    const trimmed = input.trim();
+    if (!trimmed) return;
+
+    const match = commands.find(
+      (cmd) => cmd.text.toLowerCase() === trimmed.toLowerCase()
     );
 
-    const totalLines = commands[index].output.length;
-    let shown = 0;
+    setHistory((prev) => [
+      ...prev,
+      {
+        command: trimmed,
+        output: match
+          ? match.output
+          : [`'${trimmed}' is not recognized as a command.`],
+      },
+    ]);
 
-    const interval = setInterval(() => {
-      shown++;
-      setLinesVisible((prev) =>
-        prev.map((v, i) => (i === index ? shown : v))
-      );
-
-      if (shown >= totalLines) {
-        clearInterval(interval);
-        setTimeout(() => {
-          setCurrentCommand((prev) => prev + 1);
-        }, 600);
-      }
-    }, 400);
+    setInput("");
   };
-
 
   return (
     <main className="terminal-root">
@@ -114,40 +115,62 @@ export default function Home() {
 
         {/* Terminal body */}
         <div className="terminal-body">
-          {commands.map((cmd, idx) => (
-            <div key={idx}>
-              {/* Command */}
-              {idx <= currentCommand && (
-                <p>
-                  <span className="terminal-prompt">C:\&gt;</span>
-                  <span className="terminal-command">
-                    <TypingWithCursor
-                      text={cmd.text}
-                      startType={idx === currentCommand && !typedCommands[idx]} charDelay={70}
-                      cursorDelayAfterDone={600}
-                      onTypingComplete={() => handleTypingComplete(idx)}
-                    />
-                  </span>
-                </p>
-              )}
+          {/* Intro command (typed once) */}
+          {!terminalReady && (
+            <p>
+              <span className="terminal-prompt">C:\&gt;</span>
+              <span className="terminal-command">
+                <TypingWithCursor
+                  text={commands[0].text}
+                  startType
+                  cursorDelayAfterDone={600}
+                  onTypingComplete={() => {
+                    setHistory([
+                      {
+                        command: commands[0].text,
+                        output: commands[0].output,
+                      },
+                    ]);
+                    setTerminalReady(true);
+                  }}
+                />
+              </span>
 
-              {/* Output */}
-              {linesVisible[idx] > 0 && (
-                <div className="terminal-output mt-2 space-y-1">
-                  {cmd.output.slice(0, linesVisible[idx]).map((line, i) => (
-                    <div key={i}>{line}</div>
-                  ))}
-                </div>
-              )}
+            </p>
+          )}
+
+          {/* Command history */}
+          {history.map((item, i) => (
+            <div key={i}>
+              <p>
+                <span className="terminal-prompt">C:\&gt;</span>
+                <span className="terminal-command">{item.command}</span>
+              </p>
+
+              <div className="terminal-output mt-2 space-y-1">
+                {item.output.map((line, j) => (
+                  <div key={j}>{line || "\u00A0"}</div>
+                ))}
+              </div>
             </div>
           ))}
 
-          {/* Cursor after all commands */}
-          {currentCommand >= commands.length && (
-            <p className="terminal-cursor mt-2">
-              <span className="terminal-prompt">$</span>
-              <span className="cursor" />
+          {/* Live input */}
+          {terminalReady && (
+            <p className="flex items-center relative">
+              <span className="terminal-prompt">C:\&gt;</span>
+              <input
+                className="terminal-input"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                autoFocus
+                spellCheck={false}
+                aria-label="Terminal command input"
+              />
+              <span className="cursor absolute bottom-0 pb-0 mb-0" style={{ left: `${input.length + 5}ch` }}/>
             </p>
+
           )}
         </div>
       </div>
