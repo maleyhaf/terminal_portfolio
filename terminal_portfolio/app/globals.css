@@ -131,6 +131,7 @@ body {
 .terminal-output {
   color: var(--terminal-muted);
   margin-left: 1.25rem;
+  white-space: pre-wrap;
 }
 
 .terminal-link {
@@ -198,3 +199,22 @@ body {
   color: #00ff00; /* match terminal color */
 }
 
+/* pixel icons */
+.pixel-icon {
+  font-size: 76px;
+  padding: 10px;
+  background: #000;
+  border: 1px solid #848484;
+  border-radius: 8px;
+
+  color: var(--terminal-text);
+
+  -webkit-font-smoothing: none;
+  filter: contrast(1.5);
+
+  text-shadow:
+    1px 0   0 currentColor,
+   -1px 0   0 currentColor,
+    0  1px  0 currentColor,
+    0 -1px  0 currentColor;
+}

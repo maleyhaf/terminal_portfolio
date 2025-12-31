@@ -2,11 +2,14 @@
 
 import { useEffect, useState, useRef } from "react";
 import commands from "../data/commands";
+import style from "styled-jsx/style";
 
 /* ---------- Types ---------- */
+type OutputType = "text" | "skills";
 
 type HistoryItem = {
   command: string;
+  o_type: OutputType;
   output: string[];
 };
 
@@ -75,6 +78,19 @@ export default function Home() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [input, setInput] = useState("");
 
+  // for auto scrolling to bottom on new output
+  const terminalBodyRef = useRef<HTMLDivElement | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: input ? "auto" : "smooth",
+      block: "end",
+    });
+  }, [history, input, terminalReady]);
+
+
+
   /* ---------- Command handling ---------- */
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -91,6 +107,7 @@ export default function Home() {
       ...prev,
       {
         command: trimmed,
+        o_type: match ? match.o_type : "text",
         output: match
           ? match.output
           : [`'${trimmed}' is not recognized as a command.`],
@@ -101,79 +118,106 @@ export default function Home() {
   };
 
   return (
-    <main className="terminal-root">
-      <div className="terminal-window">
-        {/* Title bar */}
-        <div className="terminal-titlebar">
-          <span className="terminal-title">C:\Portfolio\terminal.exe</span>
-          <div className="window-controls">
-            <div className="window-button">_</div>
-            <div className="window-button">□</div>
-            <div className="window-button">×</div>
+    <>
+
+      <main className="terminal-root">
+        <div className="terminal-window">
+          {/* Title bar */}
+          <div className="terminal-titlebar">
+            <span className="terminal-title">C:\Portfolio\terminal.exe</span>
+            <div className="window-controls">
+              <div className="window-button">_</div>
+              <div className="window-button">□</div>
+              <div className="window-button">×</div>
+            </div>
           </div>
-        </div>
 
-        {/* Terminal body */}
-        <div className="terminal-body">
-          {/* Intro command (typed once) */}
-          {!terminalReady && (
-            <p>
-              <span className="terminal-prompt">C:\&gt;</span>
-              <span className="terminal-command">
-                <TypingWithCursor
-                  text={commands[0].text}
-                  startType
-                  cursorDelayAfterDone={600}
-                  onTypingComplete={() => {
-                    setHistory([
-                      {
-                        command: commands[0].text,
-                        output: commands[0].output,
-                      },
-                    ]);
-                    setTerminalReady(true);
-                  }}
-                />
-              </span>
-
-            </p>
-          )}
-
-          {/* Command history */}
-          {history.map((item, i) => (
-            <div key={i}>
+          {/* Terminal body */}
+          <div ref={terminalBodyRef} className="terminal-body">
+            {/* Intro command */}
+            {!terminalReady && (
               <p>
                 <span className="terminal-prompt">C:\&gt;</span>
-                <span className="terminal-command">{item.command}</span>
+                <span className="terminal-command">
+                  <TypingWithCursor
+                    text={commands[0].text}
+                    startType
+                    cursorDelayAfterDone={600}
+                    onTypingComplete={() => {
+                      setHistory([
+                        {
+                          command: commands[0].text,
+                          o_type: commands[0].o_type,
+                          output: commands[0].output,
+                        },
+                      ]);
+                      setTerminalReady(true);
+                    }}
+                  />
+                </span>
               </p>
+            )}
 
-              <div className="terminal-output mt-2 space-y-1">
-                {item.output.map((line, j) => (
-                  <div key={j}>{line || "\u00A0"}</div>
-                ))}
+            {/* History */}
+            {history.map((item, i) => (
+              <div key={i}>
+                <p>
+                  <span className="terminal-prompt">C:\&gt;</span>
+                  <span className="terminal-command">{item.command}</span>
+                </p>
+
+                <div className="terminal-output mt-2 space-y-1">
+                  {item.o_type === "skills" ? (
+                    <div className="flex gap-6 flex-wrap">
+                      {item.output.map((skill, j) => {
+
+                        // Some icons look better in monochrome
+                        const isMonoIcon = ["nextjs", "bash", "flask", "github", "linux", "gradle"].includes(skill);
+
+                        return (
+                          <i
+                            key={j}
+                            className={`devicon-${skill}-plain ${isMonoIcon ? "" : "colored"
+                              } pixel-icon`}
+                            title={skill}
+                          />
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    item.output.map((line, j) => (
+                      <div key={j}>{line || "\u00A0"}</div>
+                    ))
+                  )}
+
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {/* Live input */}
-          {terminalReady && (
-            <p className="flex items-center relative">
-              <span className="terminal-prompt">C:\&gt;</span>
-              <input
-                className="terminal-input"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                autoFocus
-                spellCheck={false}
-                aria-label="Terminal command input"
-              />
-              <span className="cursor absolute bottom-0 pb-0 mb-0" style={{ left: `${input.length + 5}ch` }}/>
-            </p>
+            {/* Live input */}
+            {terminalReady && (
+              <p className="flex items-center relative">
+                <span className="terminal-prompt">C:\&gt;</span>
+                <input
+                  className="terminal-input"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  autoFocus
+                  spellCheck={false}
+                  aria-label="Terminal command input"
+                />
+                <span
+                  className="cursor absolute bottom-0"
+                  style={{ left: `${input.length + 5.4}ch` }}
+                />
+              </p>
+            )}
 
-          )}
+            <div ref={bottomRef} />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
