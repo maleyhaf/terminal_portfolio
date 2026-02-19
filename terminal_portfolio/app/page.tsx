@@ -152,15 +152,61 @@ export default function Home() {
     return elements;
   };
 
-
-
   // runs a command by finding it in the commands list and adding it to the history. If it's not found, it adds a default "not recognized" message to the history
   const runCommand = (commandText: string) => {
     const trimmed = commandText.trim();
     if (!trimmed) return;
 
+    const lower = trimmed.toLowerCase();
+
+    // special "clear" command to clear the terminal history
+    if (lower === "clear") {
+      setHistory([]);
+      return;
+    }
+
+    // special "run all" command to run all commands in sequence, mainly for demonstration and testing purposes but also for users who just want to see everything without typing it all out
+    if (lower === "run all") {
+      const commandsToRun = commands.filter(
+        (cmd) =>
+          cmd.text !== "run all" &&
+          cmd.text !== "clear" &&
+          cmd.text !== commands[0].text && // skip intro command
+          cmd.text !== "help" && // skip help command since it just shows the list of commands and doesn't have any unique output of its own
+          cmd.text !== "skills -f" && 
+          cmd.text !== "skills -b" &&
+          cmd.text !== "skills -t" // skip the sub-commands for skills since they are already included in the main "skills" command 
+      );
+
+      // run the "run all" command first to show the "Executing all commands..." message
+      setHistory((prev) => [
+        ...prev,
+        {
+          command: trimmed,
+          o_type: "text",
+          output: ["Executing all commands...", "\u00A0"],
+        },
+      ]);
+
+      // then add the rest of the commands with a slight delay to allow the "Executing all commands..." message to be seen before flooding the terminal with all outputs
+      setTimeout(() => {
+        setHistory((prev) => [
+          ...prev,
+          ...commandsToRun.map((cmd) => ({
+            command: cmd.text,
+            o_type: cmd.o_type,
+            output: cmd.output,
+          })),
+        ]);
+      }, 400);
+
+      return;
+    }
+
+    // default behavior: find the command and add it to history, or show not recognized message if not found
+    // find the command in the commands list (case-insensitive)
     const match = commands.find(
-      (cmd) => cmd.text.toLowerCase() === trimmed.toLowerCase()
+      (cmd) => cmd.text.toLowerCase() === lower
     );
 
     setHistory((prev) => [
@@ -174,6 +220,7 @@ export default function Home() {
       },
     ]);
   };
+
 
 
   // handles enter key press in the input to run the command

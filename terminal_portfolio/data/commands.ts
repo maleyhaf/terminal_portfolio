@@ -30,6 +30,8 @@ const commands: readonly Command[] = [
       "    skills -b - My backend skills.",
       "    skills -t - My tools.",
       "contact - Displays my contact information.",
+      "clear - Cleans the terminal.",
+      "run all - Executes all main commands in sequence.",
     ],
   },
   {
