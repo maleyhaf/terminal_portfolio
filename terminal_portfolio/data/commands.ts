@@ -14,7 +14,7 @@ const commands: readonly Command[] = [
       "\u00A0",
       "Welcome to my terminal portfolio!",
       "This is a simulation of a Windows command prompt.",
-      "Type help to see a list of available commands.",
+      "Type help to see a list of available commands or give clicking help a try.",
       "P.S. This portfolio is best viewed on desktop.",
     ],
   },
@@ -26,9 +26,9 @@ const commands: readonly Command[] = [
       "about - Displays information about me.",
       "education - Displays my education.",
       "skills - Displays my skills.",
-      "    -f - My frontend skills.",
-      "    -b - My backend skills.",
-      "    -t - My tools.",
+      "    skills -f - My frontend skills.",
+      "    skills -b - My backend skills.",
+      "    skills -t - My tools.",
       "contact - Displays my contact information.",
     ],
   },
@@ -143,6 +143,21 @@ const commands: readonly Command[] = [
       "GitHub: https://github.com/maleyhaf",
     ],
   },
+
+  {
+    text: "clear",
+    o_type: "text",
+    output: [],
+  },
+
+  {
+    text: "run all",
+    o_type: "text",
+    output: [
+      "Executing all commands...",
+      "\u00A0",
+    ],
+  }
 
 ];
 

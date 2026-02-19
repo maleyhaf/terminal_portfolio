@@ -71,6 +71,27 @@ function TypingWithCursor({
   );
 }
 
+/* ---------- Clickable commands ---------- */
+// clickable commands to have people be more engaged and not need to type out every command
+function ClickableCommand({
+  text,
+  onClick,
+}: {
+  text: string;
+  onClick: () => void;
+}) {
+  return (
+    <span
+      onClick={onClick}
+      className="terminal-clickable-command"
+    >
+      {text}
+    </span>
+  );
+}
+
+
+
 /* ---------- Home ---------- */
 
 export default function Home() {
@@ -93,10 +114,49 @@ export default function Home() {
 
   /* ---------- Command handling ---------- */
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== "Enter") return;
+  // this is a bit hacky but it allows us to render commands in the output that can be clicked to run them without needing to type them out
+  // it splits the line into words, checks if any match a command, and if so renders them as clickable commands. It also removes punctuation from the end of words to allow for things like "skills." to still be recognized as the "skills" command.
+  const renderLineWithCommands = (line: string) => {
+    let elements: React.ReactNode[] = [line];
 
-    const trimmed = input.trim();
+    // sort commands by length in descending order to ensure longer commands are matched before shorter ones (e.g. "skills -f" before "skills")
+    const sortedCommands = [...commands].sort(
+      (a, b) => b.text.length - a.text.length
+    );
+
+    sortedCommands.forEach((cmd) => {
+      elements = elements.flatMap((part) => {
+        if (typeof part !== "string") return part;
+
+        const regex = new RegExp(`(${cmd.text})`, "gi");
+
+        if (!regex.test(part)) return part;
+
+        const splitParts = part.split(regex);
+
+        return splitParts.map((segment, index) => {
+          if (segment.toLowerCase() === cmd.text.toLowerCase()) {
+            return (
+              <ClickableCommand
+                key={cmd.text + index}
+                text={segment}
+                onClick={() => runCommand(cmd.text)}
+              />
+            );
+          }
+          return segment;
+        });
+      });
+    });
+
+    return elements;
+  };
+
+
+
+  // runs a command by finding it in the commands list and adding it to the history. If it's not found, it adds a default "not recognized" message to the history
+  const runCommand = (commandText: string) => {
+    const trimmed = commandText.trim();
     if (!trimmed) return;
 
     const match = commands.find(
@@ -113,9 +173,16 @@ export default function Home() {
           : [`'${trimmed}' is not recognized as a command.`],
       },
     ]);
+  };
 
+
+  // handles enter key press in the input to run the command
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
+    runCommand(input);
     setInput("");
   };
+
 
   return (
     <>
@@ -154,6 +221,7 @@ export default function Home() {
                       setTerminalReady(true);
                     }}
                   />
+
                 </span>
               </p>
             )}
@@ -186,10 +254,11 @@ export default function Home() {
                     </div>
                   ) : (
                     item.output.map((line, j) => (
-                      <div key={j}>{line || "\u00A0"}</div>
+                      <div key={j}>
+                        {line ? renderLineWithCommands(line) : "\u00A0"}
+                      </div>
                     ))
                   )}
-
                 </div>
               </div>
             ))}
