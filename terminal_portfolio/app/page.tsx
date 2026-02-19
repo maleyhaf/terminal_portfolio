@@ -117,40 +117,34 @@ export default function Home() {
   // this is a bit hacky but it allows us to render commands in the output that can be clicked to run them without needing to type them out
   // it splits the line into words, checks if any match a command, and if so renders them as clickable commands. It also removes punctuation from the end of words to allow for things like "skills." to still be recognized as the "skills" command.
   const renderLineWithCommands = (line: string) => {
-    let elements: React.ReactNode[] = [line];
-
-    // sort commands by length in descending order to ensure longer commands are matched before shorter ones (e.g. "skills -f" before "skills")
     const sortedCommands = [...commands].sort(
       (a, b) => b.text.length - a.text.length
     );
 
-    sortedCommands.forEach((cmd) => {
-      elements = elements.flatMap((part) => {
-        if (typeof part !== "string") return part;
+    for (const cmd of sortedCommands) {
+      const regex = new RegExp(`\\b${cmd.text}\\b`, "i");
+      const match = line.match(regex);
 
-        const regex = new RegExp(`(${cmd.text})`, "gi");
+      if (match) {
+        const start = match.index ?? 0;
+        const end = start + match[0].length;
 
-        if (!regex.test(part)) return part;
+        return [
+          line.slice(0, start),
+          <ClickableCommand
+            key={cmd.text}
+            text={line.slice(start, end)}
+            onClick={() => runCommand(cmd.text)}
+          />,
+          line.slice(end),
+        ];
+      }
+    }
 
-        const splitParts = part.split(regex);
-
-        return splitParts.map((segment, index) => {
-          if (segment.toLowerCase() === cmd.text.toLowerCase()) {
-            return (
-              <ClickableCommand
-                key={cmd.text + index}
-                text={segment}
-                onClick={() => runCommand(cmd.text)}
-              />
-            );
-          }
-          return segment;
-        });
-      });
-    });
-
-    return elements;
+    // if no command found, just return plain text
+    return line;
   };
+
 
   // runs a command by finding it in the commands list and adding it to the history. If it's not found, it adds a default "not recognized" message to the history
   const runCommand = (commandText: string) => {
@@ -173,7 +167,7 @@ export default function Home() {
           cmd.text !== "clear" &&
           cmd.text !== commands[0].text && // skip intro command
           cmd.text !== "help" && // skip help command since it just shows the list of commands and doesn't have any unique output of its own
-          cmd.text !== "skills -f" && 
+          cmd.text !== "skills -f" &&
           cmd.text !== "skills -b" &&
           cmd.text !== "skills -t" // skip the sub-commands for skills since they are already included in the main "skills" command 
       );
