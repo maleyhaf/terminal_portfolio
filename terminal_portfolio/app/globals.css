@@ -342,3 +342,31 @@ body {
   border-right: 2px solid var(--win-border-light);
   border-bottom: 2px solid var(--win-border-light);
 }
+
+/* Pixel project preview image */
+.project-image {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+
+  background: #000;
+  padding: 4px;
+  margin-bottom: 12px;
+}
+
+/* Skill icon section */
+.project-skill-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+}
+
+.project-skill-icons i {
+  font-size: 36px;
+}
