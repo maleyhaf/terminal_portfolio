@@ -149,7 +149,7 @@ const projects: Project[] = [
     },
 
     {
-        exe: "terminal.exe",
+        exe: "thisportfolio.exe",
         title: "Interactive Terminal Portfolio",
         description: "Command-line style portfolio built with Next.js and React",
         overview:
@@ -163,7 +163,7 @@ const projects: Project[] = [
         tech: ["Next.js", "React", "TypeScript"],
         iconSkills: ["nextjs", "react", "typescript"],
         image: "/assets/terminal_portfolio_preview.png",
-        demoUrl: "https://maleyhas-portfolio.vercel.app/",
+        githubUrl: "https://github.com/maleyhaf/terminal_portfolio",
     },
 
     {
