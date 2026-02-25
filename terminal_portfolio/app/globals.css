@@ -31,7 +31,8 @@ body {
 
 body {
   margin: 0;
-  background-color: #008080; /* classic Windows desktop teal */
+  background-color: #008080;
+  /* classic Windows desktop teal */
   font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
   cursor: ;
 }
@@ -41,8 +42,10 @@ body {
   height: 100vh;
   width: 100vw;
   display: flex;
-  align-items: flex-end; /* bottom */
-  justify-content: flex-start; /* left */
+  align-items: flex-end;
+  /* bottom */
+  justify-content: flex-start;
+  /* left */
   padding: 1.5rem;
 }
 
@@ -147,8 +150,10 @@ body {
 /* Cursor */
 .cursor {
   display: inline-block;
-  width: 1ch;        /* width of one character */
-  height: 1em;          /* height of text */
+  width: 1ch;
+  /* width of one character */
+  height: 1em;
+  /* height of text */
   background-color: var(--accent);
   animation: blink 1s step-start infinite;
   top: 0;
@@ -157,15 +162,13 @@ body {
 
 /* Window components */
 .window-titlebar {
-  background: linear-gradient(
-    to bottom,
-    var(--accent),
-    var(--accent-dark)
-  );
+  background: linear-gradient(to bottom,
+      var(--accent),
+      var(--accent-dark));
   color: #000;
   padding: 0.4rem 0.6rem;
   font-size: 0.8rem;
-  
+
 }
 
 
@@ -182,7 +185,8 @@ body {
   padding: 0;
   margin: 0;
   width: 100%;
-  caret-color: transparent; /* hide native cursor */
+  caret-color: transparent;
+  /* hide native cursor */
 }
 
 
@@ -196,7 +200,8 @@ body {
 }
 
 .terminal-input::placeholder {
-  color: #00ff00; /* match terminal color */
+  color: #00ff00;
+  /* match terminal color */
 }
 
 /* pixel icons */
@@ -213,10 +218,10 @@ body {
   filter: contrast(1.5);
 
   text-shadow:
-    1px 0   0 currentColor,
-   -1px 0   0 currentColor,
-    0  1px  0 currentColor,
-    0 -1px  0 currentColor;
+    1px 0 0 currentColor,
+    -1px 0 0 currentColor,
+    0 1px 0 currentColor,
+    0 -1px 0 currentColor;
 }
 
 /* clickable commands */
@@ -234,15 +239,14 @@ body {
 .project-overlay {
   position: fixed;
   inset: 0;
-  pointer-events: none; /* allow terminal to still feel present */
+  pointer-events: none;
+  z-index: 1000;
+  /* allow terminal to still feel present */
 }
 
 /* Floating window */
 .project-window {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 
   width: 620px;
   background: var(--win-bg);

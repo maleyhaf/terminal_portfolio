@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import commands from "../data/commands";
 import projects, { Project } from "../data/projects";
 import ProjectWindow from "../components/ProjectWindow";
+import { WindowState } from "../types/window";
 import style from "styled-jsx/style";
 import { i } from "framer-motion/client";
 
@@ -25,6 +26,7 @@ type TypingProps = {
   cursorDelayAfterDone?: number;
   onTypingComplete?: () => void;
 };
+
 
 /* ---------- Typing Effect ---------- */
 
@@ -105,7 +107,8 @@ export default function Home() {
   const [input, setInput] = useState("");
 
   // active project windows
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [openWindows, setOpenWindows] = useState<WindowState[]>([]);
+  const [zIndexCounter, setZIndexCounter] = useState(1); // to manage z-index of windows, so that clicked window comes to front
 
   // for auto scrolling to bottom on new output
   const terminalBodyRef = useRef<HTMLDivElement | null>(null);
@@ -118,7 +121,53 @@ export default function Home() {
     });
   }, [history, input, terminalReady]);
 
+  // WINDOW MANAGEMENT
+  const openProject = (project: Project) => {
+    setOpenWindows(prev => {
+      if (prev.some(w => w.project.exe === project.exe)) {
+        return prev;
+      }
 
+      const newZ = zIndexCounter + 1;
+      setZIndexCounter(newZ);
+
+      const offset = openWindows.length * 30; // stagger windows so they don't open directly on top of each other
+
+      return [
+        ...prev,
+        {
+          project,
+          x: window.innerWidth / 2 - 300 + offset, // center of screen minus half of window width to start
+          y: window.innerHeight / 2 - 200 + offset,
+          z: newZ,
+        },
+      ];
+    });
+  };
+
+  const focusWindow = (exe: string) => {
+    setOpenWindows(prev => {
+      const newZ = zIndexCounter + 1;
+      setZIndexCounter(newZ);
+
+      const updated = prev.map(w =>
+        w.project.exe === exe
+          ? { ...w, z: newZ }
+          : w
+      );
+
+      const focused = updated.find(w => w.project.exe === exe);
+      const others = updated.filter(w => w.project.exe !== exe);
+
+      return focused ? [...others, focused] : updated;
+    });
+  };
+  
+  const closeProject = (exe: string) => {
+    setOpenWindows(prev =>
+      prev.filter(p => p.project.exe !== exe)
+    );
+  };
 
   /* ---------- Command handling ---------- */
 
@@ -208,16 +257,28 @@ export default function Home() {
 
     // Check for run <project>.exe
     if (lower.startsWith("run ")) {
-      const exeName = lower.replace("run ", "");
+      const exeName = lower.replace("run ", "").trim();
 
       const project = projects.find(
         (p) => p.exe.toLowerCase() === exeName
       );
 
       if (project) {
-        setActiveProject(project);
+        openProject(project);
         return;
       }
+
+      // if not found
+      setHistory((prev) => [
+        ...prev,
+        {
+          command: trimmed,
+          o_type: "text",
+          output: [`'${trimmed}' is not recognized as a project.`],
+        },
+      ]);
+
+      return;
     }
 
     // default behavior: find the command and add it to history, or show not recognized message if not found
@@ -357,13 +418,24 @@ export default function Home() {
               </p>
             )}
 
-            {activeProject && (
+            {openWindows.map((window, index) => (
               <ProjectWindow
-                project={activeProject}
-                onClose={() => setActiveProject(null)}
+                index={index}
+                key={window.project.exe}
+                windowState={window}
+                onMove={(x, y) => {
+                  setOpenWindows(prev =>
+                    prev.map(w =>
+                      w.project.exe === window.project.exe
+                        ? { ...w, x, y }
+                        : w
+                    )
+                  );
+                }}
+                onClose={() => closeProject(window.project.exe)}
+                onFocus={() => focusWindow(window.project.exe)}
               />
-            )}
-
+            ))}
             <div ref={bottomRef} />
           </div>
         </div>
