@@ -229,3 +229,116 @@ body {
 .terminal-clickable-command:hover {
   opacity: 0.8;
 }
+
+/* project window */
+.project-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none; /* allow terminal to still feel present */
+}
+
+/* Floating window */
+.project-window {
+  position: absolute;
+  top: 120px;
+  left: 180px;
+
+  width: 620px;
+  background: var(--win-bg);
+
+  border-top: 2px solid var(--win-border-light);
+  border-left: 2px solid var(--win-border-light);
+  border-right: 2px solid var(--win-border-darker);
+  border-bottom: 2px solid var(--win-border-darker);
+
+  box-shadow: 2px 2px 0px #000;
+
+  display: flex;
+  flex-direction: column;
+
+  pointer-events: auto;
+}
+
+/* Title bar */
+.project-titlebar {
+  height: 26px;
+  background: var(--win-titlebar);
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 6px;
+
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* Title text */
+.project-titlebar span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Window buttons */
+.project-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.project-button {
+  width: 18px;
+  height: 18px;
+  background-color: var(--win-bg);
+
+  border-top: 2px solid var(--win-border-light);
+  border-left: 2px solid var(--win-border-light);
+  border-right: 2px solid var(--win-border-darker);
+  border-bottom: 2px solid var(--win-border-darker);
+
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.project-button:active {
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+}
+
+/* Window body */
+.project-body {
+  padding: 16px;
+  background: var(--win-bg);
+  color: #000;
+  font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Demo button */
+.project-demo-button {
+  margin-top: 14px;
+  padding: 4px 10px;
+  background: var(--win-bg);
+
+  border-top: 2px solid var(--win-border-light);
+  border-left: 2px solid var(--win-border-light);
+  border-right: 2px solid var(--win-border-darker);
+  border-bottom: 2px solid var(--win-border-darker);
+
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.project-demo-button:active {
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+}

@@ -2,10 +2,15 @@
 
 import { useEffect, useState, useRef } from "react";
 import commands from "../data/commands";
+import projects, { Project } from "../data/projects";
+import ProjectWindow from "../components/ProjectWindow";
 import style from "styled-jsx/style";
+import { i } from "framer-motion/client";
+
+
 
 /* ---------- Types ---------- */
-type OutputType = "text" | "skills";
+type OutputType = "text" | "skills" | "projects";
 
 type HistoryItem = {
   command: string;
@@ -99,6 +104,9 @@ export default function Home() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [input, setInput] = useState("");
 
+  // active project windows
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+
   // for auto scrolling to bottom on new output
   const terminalBodyRef = useRef<HTMLDivElement | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -124,6 +132,7 @@ export default function Home() {
     for (const cmd of sortedCommands) {
       const regex = new RegExp(`\\b${cmd.text}\\b`, "i");
       const match = line.match(regex);
+
 
       if (match) {
         const start = match.index ?? 0;
@@ -195,6 +204,20 @@ export default function Home() {
       }, 400);
 
       return;
+    }
+
+    // Check for run <project>.exe
+    if (lower.startsWith("run ")) {
+      const exeName = lower.replace("run ", "");
+
+      const project = projects.find(
+        (p) => p.exe.toLowerCase() === exeName
+      );
+
+      if (project) {
+        setActiveProject(project);
+        return;
+      }
     }
 
     // default behavior: find the command and add it to history, or show not recognized message if not found
@@ -293,6 +316,16 @@ export default function Home() {
                         );
                       })}
                     </div>
+                  ) : item.o_type === "projects" ? (
+                    <div className="flex flex-col gap-1">
+                      {projects.map((project, j) => (
+                        <ClickableCommand
+                          key={j}
+                          text={project.exe}
+                          onClick={() => runCommand(`run ${project.exe}`)}
+                        />
+                      ))}
+                    </div>
                   ) : (
                     item.output.map((line, j) => (
                       <div key={j}>
@@ -322,6 +355,13 @@ export default function Home() {
                   style={{ left: `${input.length + 5.4}ch` }}
                 />
               </p>
+            )}
+
+            {activeProject && (
+              <ProjectWindow
+                project={activeProject}
+                onClose={() => setActiveProject(null)}
+              />
             )}
 
             <div ref={bottomRef} />

@@ -1,6 +1,6 @@
 type Command = {
   text: string;
-  o_type: "text" | "skills";
+  o_type: "text" | "skills" | "projects";
   output: string[];
 };
 
@@ -25,6 +25,7 @@ const commands: readonly Command[] = [
       "Available commands:",
       "about - Displays information about me.",
       "education - Displays my education.",
+      "projects - Displays my projects.",
       "skills - Displays my skills.",
       "    skills -f - My frontend skills.",
       "    skills -b - My backend skills.",
@@ -55,46 +56,46 @@ const commands: readonly Command[] = [
     ],
   },
   {
-  text: "skills",
-  o_type: "skills",
-  output: [
-    // Languages
-    "python",
-    "c",
-    "java",
-    "javascript",
-    "html5",
-    "css3",
-    "sqlite",
-    "dart",
-    "json",
-    "bash",
+    text: "skills",
+    o_type: "skills",
+    output: [
+      // Languages
+      "python",
+      "c",
+      "java",
+      "javascript",
+      "html5",
+      "css3",
+      "sqlite",
+      "dart",
+      "json",
+      "bash",
 
-    // Frameworks
-    "react",
-    "nextjs",
-    "flutter",
-    "flask",
+      // Frameworks
+      "react",
+      "nextjs",
+      "flutter",
+      "flask",
 
-    // Tools & Libraries
-    "git",
-    "github",
-    "docker",
-    "linux",
-    "vscode",
-    "androidstudio",
-    "cmake",
-    "gradle",
-    "azuredevops",
-    "jira"
-  ],
-},
-{
+      // Tools & Libraries
+      "git",
+      "github",
+      "docker",
+      "linux",
+      "vscode",
+      "androidstudio",
+      "cmake",
+      "gradle",
+      "azuredevops",
+      "jira"
+    ],
+  },
+  {
     text: "skills -f",
     o_type: "skills",
     output: [
       // Frontend Skills
-      "javascript", 
+      "javascript",
       "typescript",
       "html5",
       "css3",
@@ -105,7 +106,7 @@ const commands: readonly Command[] = [
   },
   {
     text: "skills -b",
-    o_type: "skills", 
+    o_type: "skills",
     output: [
       // Backend Skills
       "python",
@@ -121,11 +122,11 @@ const commands: readonly Command[] = [
   },
   {
     text: "skills -t",
-    o_type: "skills", 
+    o_type: "skills",
     output: [
       // Tools & Libraries
       "git",
-      "github", 
+      "github",
       "docker",
       "vscode",
       "androidstudio",
@@ -158,6 +159,19 @@ const commands: readonly Command[] = [
     output: [
       "Executing all commands...",
       "\u00A0",
+    ],
+  },
+
+  {
+    text: "projects",
+    o_type: "projects",
+    output: [
+      "Directory of C:\Projects",
+      "\u00A0",
+      "fish-analyzer.exe",
+      "task-manager.exe",
+      "\u00A0",
+      "Use: run <filename>.exe"
     ],
   }
 
