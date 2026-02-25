@@ -162,7 +162,7 @@ export default function Home() {
       return focused ? [...others, focused] : updated;
     });
   };
-  
+
   const closeProject = (exe: string) => {
     setOpenWindows(prev =>
       prev.filter(p => p.project.exe !== exe)
@@ -265,6 +265,16 @@ export default function Home() {
 
       if (project) {
         openProject(project);
+
+        // if found
+        setHistory((prev) => [
+          ...prev,
+          {
+            command: trimmed,
+            o_type: "text",
+            output: [`Running ${project.exe}...`],
+          },
+        ]);
         return;
       }
 

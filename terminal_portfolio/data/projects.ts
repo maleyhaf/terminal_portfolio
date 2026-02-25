@@ -11,6 +11,7 @@ export type Project = {
     image?: string;
     demoUrl?: string;
     githubUrl?: string;
+    companyUrl?: string;
 };
 
 const projects: Project[] = [
@@ -37,7 +38,7 @@ const projects: Project[] = [
         ],
         iconSkills: ["python", "c","linux", "git"],
         image: "/assets/Cognitive_logo.jpg",
-        demoUrl: "https://www.cognitivesystems.com/",
+        companyUrl: "https://www.cognitivesystems.com/",
     },
 
     {

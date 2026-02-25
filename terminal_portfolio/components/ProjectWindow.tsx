@@ -126,6 +126,15 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
                                     GitHub Repo
                                 </button>
                             )}
+                            {windowState.project.companyUrl && (
+                                <button
+                                    className="project-demo-button"
+                                    onClick={() => window.open(windowState.project.companyUrl, "_blank")}
+                                    style={{ marginLeft: "8px" }}
+                                >
+                                    Company Website
+                                </button>
+                            )}
                         </div>
 
                     </div>
