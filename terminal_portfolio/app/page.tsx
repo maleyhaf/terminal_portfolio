@@ -3,9 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import commands from "../data/commands";
 import projects, { Project } from "../data/projects";
+import { WindowState } from "../types/window";
+import { ProjectWindowState } from "../types/window";
+import { ContactWindowState } from "../types/window";
 import ProjectWindow from "../components/ProjectWindow";
 import ContactWindow from "../components/ContactWindow";
-import { WindowState } from "../types/window";
+
 import style from "styled-jsx/style";
 import { i } from "framer-motion/client";
 
@@ -124,12 +127,12 @@ export default function Home() {
   }, [history, input, terminalReady]);
 
   // WINDOW MANAGEMENT
-  const openWindow = (window: Omit<WindowState, "z">) => {
+  const openWindow = (win: Omit<ProjectWindowState, "z"> | Omit<ContactWindowState, "z">) => {
     zIndexCounter.current += 1;
     const newZ = zIndexCounter.current;
 
     setWindows(prev => {
-      if (prev.some(w => w.id === window.id)) return prev;
+      if (prev.some(w => w.id === win.id)) return prev;
 
       const staggerAmount = 30;
       const offset = prev.length * staggerAmount;
@@ -137,11 +140,11 @@ export default function Home() {
       return [
         ...prev,
         {
-          ...window,
-          x: window.x + offset,
-          y: window.y + offset,
+          ...win,
+          x: win.x + offset,
+          y: win.y + offset,
           z: newZ,
-        },
+        } as WindowState,
       ];
     });
   };
