@@ -237,16 +237,15 @@ body {
 
 /* project window */
 .project-overlay {
-  position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 1000;
   /* allow terminal to still feel present */
 }
 
 /* Floating window */
 .project-window {
-  position: absolute;
+  position: fixed;
+  top: 0;
 
   width: 620px;
   background: var(--win-bg);
@@ -377,4 +376,109 @@ body {
 
 .project-skill-icons i {
   font-size: 36px;
+}
+
+/* contact section */
+/* Contact window wrapper uses same overlay + window classes */
+/* You can reuse .project-overlay and .project-window */
+
+/* Email header section (To / From / Subject rows) */
+.email-header {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Each row inside header */
+.email-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+}
+
+.email-row strong {
+  width: 60px;
+}
+
+/* Retro input fields */
+.email-input {
+  flex: 1;
+  padding: 3px 4px;
+
+  background: #ffffff;
+  color: #000;
+
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+
+  font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
+  font-size: 0.75rem;
+}
+
+/* Textarea (message body) */
+.email-textarea {
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px;
+
+  background: #ffffff;
+  color: #000;
+
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+
+  font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
+  font-size: 0.75rem;
+
+  resize: none;
+}
+
+/* Fake toolbar separator line */
+.email-divider {
+  height: 2px;
+  margin: 14px 0;
+
+  background: var(--win-border-darker);
+
+  border-top: 1px solid var(--win-border-light);
+}
+
+/* Direct contact section */
+.contact-section-title {
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+/* Contact links styled like clickable Windows list items */
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-link {
+  padding: 3px 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+
+  border: 1px solid transparent;
+}
+
+.contact-link:hover {
+  background: var(--win-titlebar);
+  color: #ffffff;
+}
+
+.contact-link:active {
+  border-top: 1px solid var(--win-border-darker);
+  border-left: 1px solid var(--win-border-darker);
+  border-right: 1px solid var(--win-border-light);
+  border-bottom: 1px solid var(--win-border-light);
 }

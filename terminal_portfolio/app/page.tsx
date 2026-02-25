@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import commands from "../data/commands";
 import projects, { Project } from "../data/projects";
 import ProjectWindow from "../components/ProjectWindow";
+import ContactWindow from "../components/ContactWindow";
 import { WindowState } from "../types/window";
 import style from "styled-jsx/style";
 import { i } from "framer-motion/client";
@@ -106,9 +107,10 @@ export default function Home() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [input, setInput] = useState("");
 
-  // active project windows
-  const [openWindows, setOpenWindows] = useState<WindowState[]>([]);
-  const [zIndexCounter, setZIndexCounter] = useState(1); // to manage z-index of windows, so that clicked window comes to front
+  // active windows state
+  const [windows, setWindows] = useState<WindowState[]>([]);
+  const zIndexCounter = useRef(1); // to manage z-index of windows, so that clicked window comes to front
+
 
   // for auto scrolling to bottom on new output
   const terminalBodyRef = useRef<HTMLDivElement | null>(null);
@@ -122,52 +124,65 @@ export default function Home() {
   }, [history, input, terminalReady]);
 
   // WINDOW MANAGEMENT
-  const openProject = (project: Project) => {
-    setOpenWindows(prev => {
-      if (prev.some(w => w.project.exe === project.exe)) {
-        return prev;
-      }
+  const openWindow = (window: Omit<WindowState, "z">) => {
+    zIndexCounter.current += 1;
+    const newZ = zIndexCounter.current;
 
-      const newZ = zIndexCounter + 1;
-      setZIndexCounter(newZ);
+    setWindows(prev => {
+      if (prev.some(w => w.id === window.id)) return prev;
 
-      const offset = openWindows.length * 30; // stagger windows so they don't open directly on top of each other
+      const staggerAmount = 30;
+      const offset = prev.length * staggerAmount;
 
       return [
         ...prev,
         {
-          project,
-          x: window.innerWidth / 2 - 300 + offset, // center of screen minus half of window width to start
-          y: window.innerHeight / 2 - 200 + offset,
+          ...window,
+          x: window.x + offset,
+          y: window.y + offset,
           z: newZ,
         },
       ];
     });
   };
 
-  const focusWindow = (exe: string) => {
-    setOpenWindows(prev => {
-      const newZ = zIndexCounter + 1;
-      setZIndexCounter(newZ);
-
-      const updated = prev.map(w =>
-        w.project.exe === exe
-          ? { ...w, z: newZ }
-          : w
-      );
-
-      const focused = updated.find(w => w.project.exe === exe);
-      const others = updated.filter(w => w.project.exe !== exe);
-
-      return focused ? [...others, focused] : updated;
+  // for projects
+  const openProject = (project: Project) => {
+    // window state type
+    openWindow({
+      type: "project",
+      id: project.exe,
+      project,
+      x: window.innerWidth / 2 - 300,
+      y: window.innerHeight / 2 - 200,
     });
   };
 
-  const closeProject = (exe: string) => {
-    setOpenWindows(prev =>
-      prev.filter(p => p.project.exe !== exe)
+  // for contact window
+  const openContact = () => {
+    openWindow({
+      type: "contact",
+      id: "contact",
+      x: window.innerWidth / 2 - 260,
+      y: window.innerHeight / 2 - 180,
+    });
+  };
+
+  const focusWindow = (id: string) => {
+    zIndexCounter.current += 1;
+    const newZ = zIndexCounter.current;
+
+    setWindows(prev =>
+      prev.map(w =>
+        w.id === id ? { ...w, z: newZ } : w
+      )
     );
   };
+
+  const closeWindow = (id: string) => {
+    setWindows(prev => prev.filter(w => w.id !== id));
+  };
+
 
   /* ---------- Command handling ---------- */
 
@@ -251,6 +266,22 @@ export default function Home() {
           })),
         ]);
       }, 400);
+
+      return;
+    }
+
+    // check for the contact command to open the contact window
+    if (lower === "contact") {
+      openContact();
+
+      setHistory(prev => [
+        ...prev,
+        {
+          command: trimmed,
+          o_type: "text",
+          output: ["Opening contact.exe..."],
+        },
+      ]);
 
       return;
     }
@@ -428,28 +459,52 @@ export default function Home() {
               </p>
             )}
 
-            {openWindows.map((window, index) => (
-              <ProjectWindow
-                index={index}
-                key={window.project.exe}
-                windowState={window}
-                onMove={(x, y) => {
-                  setOpenWindows(prev =>
-                    prev.map(w =>
-                      w.project.exe === window.project.exe
-                        ? { ...w, x, y }
-                        : w
-                    )
-                  );
-                }}
-                onClose={() => closeProject(window.project.exe)}
-                onFocus={() => focusWindow(window.project.exe)}
-              />
-            ))}
             <div ref={bottomRef} />
           </div>
         </div>
       </main>
+
+      {windows.map((window, index) => {
+        if (window.type === "project") {
+          return (
+            <ProjectWindow
+              key={window.id}
+              index={index}
+              windowState={window}
+              onMove={(x, y) =>
+                setWindows(prev =>
+                  prev.map(w =>
+                    w.id === window.id ? { ...w, x, y } : w
+                  )
+                )
+              }
+              onClose={() => closeWindow(window.id)}
+              onFocus={() => focusWindow(window.id)}
+            />
+          );
+        }
+
+        if (window.type === "contact") {
+          return (
+            <ContactWindow
+              key={window.id}
+              index={index}
+              windowState={window}
+              onMove={(x, y) =>
+                setWindows(prev =>
+                  prev.map(w =>
+                    w.id === window.id ? { ...w, x, y } : w
+                  )
+                )
+              }
+              onClose={() => closeWindow(window.id)}
+              onFocus={() => focusWindow(window.id)}
+            />
+          );
+        }
+
+        return null;
+      })}
     </>
   );
 }

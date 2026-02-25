@@ -139,7 +139,7 @@ const commands: readonly Command[] = [
 
   {
     text: "contact",
-    o_type: "text",
+    o_type: "projects",
     output: [
       "Email: maleyhaf@gmail.com",
       "LinkedIn: https://www.linkedin.com/in/maleyha-fatima-4821bb279/",

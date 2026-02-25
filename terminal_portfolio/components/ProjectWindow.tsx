@@ -15,131 +15,133 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
     const monoIcons = ["nextjs", "bash", "flask", "github", "linux", "gradle"];
     const nodeRef = useRef<HTMLDivElement>(null);
 
+    if (windowState.type !== "project") return null;
     return (
-        <div className="project-overlay">
-
-            <Draggable
-                nodeRef={nodeRef}
-                handle=".project-titlebar"
-                position={{ x: windowState.x, y: windowState.y }}
-                onStop={(e, data) => {
-                    onMove(data.x, data.y);
+        <Draggable
+            nodeRef={nodeRef}
+            handle=".project-titlebar"
+            defaultPosition={{ x: windowState.x, y: windowState.y }}
+            onStop={(e, data) => {
+                onMove(data.x, data.y);
+            }}
+        >
+            <div
+                ref={nodeRef}
+                className="project-window"
+                style={{
+                    zIndex: windowState.z,
+                    position: "fixed",
+                    top: 0,
                 }}
+                onMouseDownCapture={onFocus}
             >
-                <div
-                    ref={nodeRef}
-                    className="project-window"
-                    style={{ zIndex: windowState.z }}
-                    onMouseDownCapture={onFocus}
-                >
 
-                    {/* Title Bar */}
-                    <div className="project-titlebar" onMouseDown={onFocus}>
-                        <span>{windowState.project.exe}</span>
+                {/* Title Bar */}
+                <div className="project-titlebar" onMouseDown={onFocus}>
+                    <span>{windowState.project.exe}</span>
 
-                        <div className="project-controls">
-                            <div className="project-button">_</div>
-                            <div className="project-button">□</div>
-                            <div
-                                className="project-button"
-                                onClick={onClose}
-                            >
-                                ×
-                            </div>
+                    <div className="project-controls">
+                        <div className="project-button">_</div>
+                        <div className="project-button">□</div>
+                        <div
+                            className="project-button"
+                            onClick={onClose}
+                        >
+                            ×
                         </div>
-                    </div>
-
-                    {/* Window Body */}
-                    <div className="project-body">
-
-                        <div style={{ marginBottom: "8px", fontWeight: "bold" }}>
-                            {windowState.project.title}
-                        </div>
-
-                        {/* Pixel Image */}
-                        {windowState.project.image && (
-                            <img
-                                src={windowState.project.image}
-                                alt={windowState.project.title}
-                                className="project-image"
-                                width={200}
-                            />
-                        )}
-
-                        <div style={{ marginBottom: "10px" }}>
-                            {windowState.project.description}
-                        </div>
-
-                        {/* Extended Overview */}
-                        {windowState.project.overview && (
-                            <div style={{ marginBottom: "10px" }}>
-                                {windowState.project.overview}
-                            </div>
-                        )}
-
-                        {/* Bullet Details */}
-                        {windowState.project.details && (
-                            <ul style={{ marginBottom: "12px" }}>
-                                {windowState.project.details.map((d, i) => (
-                                    <li key={i}>{d}</li>
-                                ))}
-                            </ul>
-                        )}
-
-                        {/* Devicon Skill Icons */}
-                        {windowState.project.iconSkills && (
-                            <>
-                                <div style={{ fontWeight: "bold" }}>
-                                    Technologies:
-                                </div>
-
-                                <div className="project-skill-icons">
-                                    {windowState.project.iconSkills.map((skill, i) => (
-                                        <i
-                                            key={i}
-                                            className={`devicon-${skill}-plain ${monoIcons.includes(skill) ? "" : "colored"
-                                                }`}
-                                            title={skill}
-                                        />
-                                    ))}
-                                </div>
-                            </>
-                        )}
-
-                        {/* Buttons */}
-                        <div style={{ marginTop: "10px" }}>
-                            {windowState.project.demoUrl && (
-                                <button
-                                    className="project-demo-button"
-                                    onClick={() => window.open(windowState.project.demoUrl, "_blank")}
-                                >
-                                    View Live Demo
-                                </button>
-                            )}
-
-                            {windowState.project.githubUrl && (
-                                <button
-                                    className="project-demo-button"
-                                    onClick={() => window.open(windowState.project.githubUrl, "_blank")}
-                                    style={{ marginLeft: "8px" }}
-                                >
-                                    GitHub Repo
-                                </button>
-                            )}
-                            {windowState.project.companyUrl && (
-                                <button
-                                    className="project-demo-button"
-                                    onClick={() => window.open(windowState.project.companyUrl, "_blank")}
-                                    style={{ marginLeft: "8px" }}
-                                >
-                                    Company Website
-                                </button>
-                            )}
-                        </div>
-
                     </div>
                 </div>
-            </Draggable>
-        </div>
+
+                {/* Window Body */}
+                <div className="project-body">
+
+                    <div style={{ marginBottom: "8px", fontWeight: "bold" }}>
+                        {windowState.project.title}
+                    </div>
+
+                    {/* Pixel Image */}
+                    {windowState.project.image && (
+                        <img
+                            src={windowState.project.image}
+                            alt={windowState.project.title}
+                            className="project-image"
+                            width={200}
+                        />
+                    )}
+
+                    <div style={{ marginBottom: "10px" }}>
+                        {windowState.project.description}
+                    </div>
+
+                    {/* Extended Overview */}
+                    {windowState.project.overview && (
+                        <div style={{ marginBottom: "10px" }}>
+                            {windowState.project.overview}
+                        </div>
+                    )}
+
+                    {/* Bullet Details */}
+                    {windowState.project.details && (
+                        <ul style={{ marginBottom: "12px" }}>
+                            {windowState.project.details.map((d, i) => (
+                                <li key={i}>{d}</li>
+                            ))}
+                        </ul>
+                    )}
+
+                    {/* Devicon Skill Icons */}
+                    {windowState.project.iconSkills && (
+                        <>
+                            <div style={{ fontWeight: "bold" }}>
+                                Technologies:
+                            </div>
+
+                            <div className="project-skill-icons">
+                                {windowState.project.iconSkills.map((skill, i) => (
+                                    <i
+                                        key={i}
+                                        className={`devicon-${skill}-plain ${monoIcons.includes(skill) ? "" : "colored"
+                                            }`}
+                                        title={skill}
+                                    />
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {/* Buttons */}
+                    <div style={{ marginTop: "10px" }}>
+                        {windowState.project.demoUrl && (
+                            <button
+                                className="project-demo-button"
+                                onClick={() => window.open(windowState.project.demoUrl, "_blank")}
+                            >
+                                View Live Demo
+                            </button>
+                        )}
+
+                        {windowState.project.githubUrl && (
+                            <button
+                                className="project-demo-button"
+                                onClick={() => window.open(windowState.project.githubUrl, "_blank")}
+                                style={{ marginLeft: "8px" }}
+                            >
+                                GitHub Repo
+                            </button>
+                        )}
+                        {windowState.project.companyUrl && (
+                            <button
+                                className="project-demo-button"
+                                onClick={() => window.open(windowState.project.companyUrl, "_blank")}
+                                style={{ marginLeft: "8px" }}
+                            >
+                                Company Website
+                            </button>
+                        )}
+                    </div>
+
+                </div>
+            </div>
+        </Draggable>
     );
 }
