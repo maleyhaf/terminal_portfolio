@@ -642,3 +642,40 @@ body {
   line-height: 1.5;
   margin: 0;
 }
+
+/* Sparkles after name */
+.about-sparkles {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.sparkle {
+  display: inline-block;
+  color: var(--accent);
+  font-size: 0.7rem;
+  animation: sparkle-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes sparkle-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.7); }
+}
+
+/* Walking pixel cat */
+.about-cat-track {
+  position: relative;
+  height: 48px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--win-border-darker);
+}
+
+.about-cat {
+  position: absolute;
+  bottom: 2px;
+  image-rendering: pixelated;
+  user-select: none;
+  transition: left 0.03s linear;
+}
