@@ -181,7 +181,7 @@ const projects: Project[] = [
         tech: ["Flutter", "Dart", "GPS & Geolocation", "Game Mechanics"],
         iconSkills: ["flutter", "dart"],
         image: "/assets/keepup_project.png",
-        githubUrl: "https://github.com/maleyhaf",
+        githubUrl: "https://github.com/maleyhaf/KeepUp",
     },
 
 ];
