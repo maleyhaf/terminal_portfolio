@@ -11,6 +11,7 @@ type Props = {
     onMove: (x: number, y: number) => void;
     onClose: () => void;
     onFocus: () => void;
+    onMinimize: () => void;
 };
 
 export default function ContactWindow({
@@ -19,6 +20,7 @@ export default function ContactWindow({
     onMove,
     onClose,
     onFocus,
+    onMinimize,
 }: Props) {
     const nodeRef = useRef<HTMLDivElement>(null);
 
@@ -81,7 +83,7 @@ export default function ContactWindow({
                     <span>contact.exe</span>
 
                     <div className="project-controls">
-                        <div className="project-button">_</div>
+                        <div className="project-button" onClick={onMinimize}>_</div>
                         <div className="project-button">□</div>
                         <div
                             className="project-button"

@@ -9,9 +9,10 @@ type Props = {
     onMove: (x: number, y: number) => void;
     onClose: () => void;
     onFocus: () => void;
+    onMinimize: () => void;
 };
 
-export default function ProjectWindow({ index, windowState, onMove, onClose, onFocus }: Props) {
+export default function ProjectWindow({ index, windowState, onMove, onClose, onFocus, onMinimize }: Props) {
     const monoIcons = ["nextjs", "bash", "flask", "github", "linux", "gradle"];
     const nodeRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +42,7 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
                     <span>{windowState.project.exe}</span>
 
                     <div className="project-controls">
-                        <div className="project-button">_</div>
+                        <div className="project-button" onClick={onMinimize}>_</div>
                         <div className="project-button">□</div>
                         <div
                             className="project-button"

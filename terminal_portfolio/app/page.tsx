@@ -6,8 +6,11 @@ import projects, { Project } from "../data/projects";
 import { WindowState } from "../types/window";
 import { ProjectWindowState } from "../types/window";
 import { ContactWindowState } from "../types/window";
+import { AboutWindowState } from "../types/window";
 import ProjectWindow from "../components/ProjectWindow";
 import ContactWindow from "../components/ContactWindow";
+import AboutWindow from "../components/AboutWindow";
+import Taskbar from "../components/Taskbar";
 
 import style from "styled-jsx/style";
 import { i } from "framer-motion/client";
@@ -106,6 +109,7 @@ function ClickableCommand({
 /* ---------- Home ---------- */
 
 export default function Home() {
+  const [terminalZ, setTerminalZ] = useState(1); // separate z-index state for terminal to ensure it can be brought to front when clicked
   const [terminalReady, setTerminalReady] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [input, setInput] = useState("");
@@ -113,6 +117,7 @@ export default function Home() {
   // active windows state
   const [windows, setWindows] = useState<WindowState[]>([]);
   const zIndexCounter = useRef(1); // to manage z-index of windows, so that clicked window comes to front
+
 
 
   // for auto scrolling to bottom on new output
@@ -126,13 +131,25 @@ export default function Home() {
     });
   }, [history, input, terminalReady]);
 
+  // open about window on initial load
+  useEffect(() => {
+    openAbout();
+  }, []);
+
   // WINDOW MANAGEMENT
-  const openWindow = (win: Omit<ProjectWindowState, "z"> | Omit<ContactWindowState, "z">) => {
+  const openWindow = (win: Omit<ProjectWindowState, "z" | "minimized"> | Omit<ContactWindowState, "z" | "minimized"> | Omit<AboutWindowState, "z" | "minimized">) => {
     zIndexCounter.current += 1;
     const newZ = zIndexCounter.current;
 
     setWindows(prev => {
-      if (prev.some(w => w.id === win.id)) return prev;
+      // if already open but minimized, just restore it
+      const existing = prev.find(w => w.id === win.id);
+      if (existing) {
+        if (existing.minimized) {
+          return prev.map(w => w.id === win.id ? { ...w, minimized: false, z: newZ } : w);
+        }
+        return prev;
+      }
 
       const staggerAmount = 30;
       const offset = prev.length * staggerAmount;
@@ -144,8 +161,24 @@ export default function Home() {
           x: win.x + offset,
           y: win.y + offset,
           z: newZ,
+          minimized: false,
         } as WindowState,
       ];
+    });
+  };
+
+  // minimize function:
+  const minimizeWindow = (id: string) => {
+    setWindows(prev => prev.map(w => w.id === id ? { ...w, minimized: true } : w));
+  };
+
+  //  openAbout:
+  const openAbout = () => {
+    openWindow({
+      type: "about",
+      id: "about",
+      x: window.innerWidth - 600,
+      y: 40,
     });
   };
 
@@ -241,14 +274,15 @@ export default function Home() {
         (cmd) =>
           cmd.text !== "run all" &&
           cmd.text !== "clear" &&
-          cmd.text !== commands[0].text && // skip intro command
-          cmd.text !== "help" && // skip help command since it just shows the list of commands and doesn't have any unique output of its own
+          cmd.text !== commands[0].text &&
+          cmd.text !== "help" &&
+          cmd.text !== "contact" && // exclude from batch text output
+          cmd.text !== "about" && // exclude from batch text output
           cmd.text !== "skills -f" &&
           cmd.text !== "skills -b" &&
-          cmd.text !== "skills -t" // skip the sub-commands for skills since they are already included in the main "skills" command 
+          cmd.text !== "skills -t"
       );
 
-      // run the "run all" command first to show the "Executing all commands..." message
       setHistory((prev) => [
         ...prev,
         {
@@ -258,10 +292,22 @@ export default function Home() {
         },
       ]);
 
-      // then add the rest of the commands with a slight delay to allow the "Executing all commands..." message to be seen before flooding the terminal with all outputs
       setTimeout(() => {
+        openAbout(); // openning about window as part of the "run all" command 
+        openContact(); // openning contact window as part of the "run all" command to show how windows can be opened from commands and to give users a taste of the interactive features of the portfolio
+
         setHistory((prev) => [
           ...prev,
+          {
+            command: "about",
+            o_type: "text",
+            output: ["Opening about.exe..."],
+          },
+          {
+            command: "contact",
+            o_type: "text",
+            output: ["Opening contact.exe..."],
+          },
           ...commandsToRun.map((cmd) => ({
             command: cmd.text,
             o_type: cmd.o_type,
@@ -269,6 +315,22 @@ export default function Home() {
           })),
         ]);
       }, 400);
+
+      return;
+    }
+
+    // check for the about command to open the about window
+    if (lower === "about") {
+      openAbout();
+
+      setHistory(prev => [
+        ...prev,
+        {
+          command: trimmed,
+          o_type: "text",
+          output: ["Opening about.exe..."],
+        },
+      ]);
 
       return;
     }
@@ -356,8 +418,17 @@ export default function Home() {
   return (
     <>
 
-      <main className="terminal-root">
-        <div className="terminal-window">
+      <main
+        className="terminal-root"
+      >
+        <div
+          className="terminal-window"
+          style={{ zIndex: terminalZ }}
+          onMouseDown={() => {
+            zIndexCounter.current += 1;
+            setTerminalZ(zIndexCounter.current);
+          }}
+        >
           {/* Title bar */}
           <div className="terminal-titlebar">
             <span className="terminal-title">C:\Portfolio\terminal.exe</span>
@@ -467,47 +538,64 @@ export default function Home() {
         </div>
       </main>
 
-      {windows.map((window, index) => {
-        if (window.type === "project") {
+      {windows.map((win, index) => {
+        if (win.minimized) return null; // hide minimized windows
+
+        if (win.type === "project") {
           return (
             <ProjectWindow
-              key={window.id}
+              key={win.id}
               index={index}
-              windowState={window}
-              onMove={(x, y) =>
-                setWindows(prev =>
-                  prev.map(w =>
-                    w.id === window.id ? { ...w, x, y } : w
-                  )
-                )
-              }
-              onClose={() => closeWindow(window.id)}
-              onFocus={() => focusWindow(window.id)}
+              windowState={win}
+              onMove={(x, y) => setWindows(prev => prev.map(w => w.id === win.id ? { ...w, x, y } : w))}
+              onClose={() => closeWindow(win.id)}
+              onFocus={() => focusWindow(win.id)}
+              onMinimize={() => minimizeWindow(win.id)}
             />
           );
         }
-
-        if (window.type === "contact") {
+        if (win.type === "contact") {
           return (
             <ContactWindow
-              key={window.id}
+              key={win.id}
               index={index}
-              windowState={window}
-              onMove={(x, y) =>
-                setWindows(prev =>
-                  prev.map(w =>
-                    w.id === window.id ? { ...w, x, y } : w
-                  )
-                )
-              }
-              onClose={() => closeWindow(window.id)}
-              onFocus={() => focusWindow(window.id)}
+              windowState={win}
+              onMove={(x, y) => setWindows(prev => prev.map(w => w.id === win.id ? { ...w, x, y } : w))}
+              onClose={() => closeWindow(win.id)}
+              onFocus={() => focusWindow(win.id)}
+              onMinimize={() => minimizeWindow(win.id)}
             />
           );
         }
-
+        if (win.type === "about") {
+          return (
+            <AboutWindow
+              key={win.id}
+              index={index}
+              windowState={win}
+              onMove={(x, y) => setWindows(prev => prev.map(w => w.id === win.id ? { ...w, x, y } : w))}
+              onFocus={() => focusWindow(win.id)}
+              onMinimize={() => minimizeWindow(win.id)}
+            />
+          );
+        }
         return null;
       })}
+
+      {/* Taskbar */}
+      <Taskbar
+        windows={windows}
+        onClickItem={(id) => {
+          const win = windows.find(w => w.id === id);
+          if (!win) return;
+          if (win.minimized) {
+            setWindows(prev => prev.map(w => w.id === id ? { ...w, minimized: false, z: ++zIndexCounter.current } : w));
+          } else {
+            minimizeWindow(id);
+          }
+        }}
+        onAbout={openAbout}
+      />
     </>
   );
 }

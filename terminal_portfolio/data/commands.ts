@@ -16,6 +16,8 @@ const commands: readonly Command[] = [
       "This is a simulation of a Windows command prompt.",
       "Type help to see a list of available commands or give clicking help a try.",
       "P.S. This portfolio is best viewed on desktop.",
+      "\u00A0",
+      "Hint: try running 'run all' to see everything at once.",
     ],
   },
   {
@@ -39,9 +41,7 @@ const commands: readonly Command[] = [
     text: "about",
     o_type: "text",
     output: [
-      "Name: Maleyha Fatima",
-      "Role: Software Developer",
-      "Interests: Backend, Full Stack, AI/ML",
+      "Opening about.exe...",
     ],
   },
   {
@@ -141,9 +141,7 @@ const commands: readonly Command[] = [
     text: "contact",
     o_type: "projects",
     output: [
-      "Email: maleyhaf@gmail.com",
-      "LinkedIn: https://www.linkedin.com/in/maleyha-fatima-4821bb279/",
-      "GitHub: https://github.com/maleyhaf",
+      "Opening contact.exe...",
     ],
   },
 

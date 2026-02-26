@@ -8,7 +8,7 @@
 :root {
   --accent: #d63484;
   --accent-soft: #f06aa9;
-  --accent-dark: #a91f5e;
+  --accent-dark: #9b0c4c;
 
   --terminal-bg: #000000;
   --terminal-text: #00ff9c;
@@ -34,11 +34,12 @@ body {
   background-color: #008080;
   /* classic Windows desktop teal */
   font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
-  cursor: ;
+  cursor: default;
 }
 
 /* Root container */
 .terminal-root {
+  position: relative;
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -51,8 +52,11 @@ body {
 
 /* Terminal window */
 .terminal-window {
-  width: 100%;
-  max-width: 900px;
+  position: fixed;
+  bottom: 60px; /* above taskbar */
+  left: 24px;
+  width: 900px;
+  max-width: calc(100vw - 48px);
   height: 70vh;
   background-color: var(--terminal-bg);
 
@@ -481,4 +485,160 @@ body {
   border-left: 1px solid var(--win-border-darker);
   border-right: 1px solid var(--win-border-light);
   border-bottom: 1px solid var(--win-border-light);
+}
+
+/* Taskbar */
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  background: var(--win-bg);
+  border-top: 2px solid var(--win-border-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+  z-index: 9999;
+}
+
+.taskbar-start {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  background: var(--win-bg);
+  border-top: 2px solid var(--win-border-light);
+  border-left: 2px solid var(--win-border-light);
+  border-right: 2px solid var(--win-border-darker);
+  border-bottom: 2px solid var(--win-border-darker);
+  cursor: pointer;
+  height: 26px;
+  font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
+}
+
+.taskbar-start:active {
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+}
+
+.taskbar-start-icon {
+  font-size: 1rem;
+}
+
+.taskbar-divider {
+  width: 2px;
+  height: 26px;
+  border-left: 1px solid var(--win-border-darker);
+  border-right: 1px solid var(--win-border-light);
+  margin: 0 2px;
+}
+
+.taskbar-items {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+}
+
+.taskbar-item {
+  height: 26px;
+  padding: 0 8px;
+  font-size: 0.75rem;
+  font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
+  background: var(--win-bg);
+  border-top: 2px solid var(--win-border-light);
+  border-left: 2px solid var(--win-border-light);
+  border-right: 2px solid var(--win-border-darker);
+  border-bottom: 2px solid var(--win-border-darker);
+  cursor: pointer;
+  min-width: 120px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.taskbar-item-active {
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+  background: #b0b0b0;
+}
+
+.taskbar-clock {
+  height: 26px;
+  padding: 0 8px;
+  font-size: 0.75rem;
+  font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+  display: flex;
+  align-items: center;
+}
+
+/* About window */
+.about-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 90vh;
+  max-width: 100%;
+  overflow-y: auto;
+}
+
+.about-header {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--win-border-darker);
+}
+
+.about-avatar {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  image-rendering: pixelated;
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+}
+
+.about-name {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.about-title {
+  font-size: 0.8rem;
+  color: #444;
+}
+
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.about-section-title {
+  font-weight: bold;
+  font-size: 0.75rem;
+  color:var(--accent);
+  font-family: "Courier New", monospace;
+}
+
+.about-section p {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0;
 }

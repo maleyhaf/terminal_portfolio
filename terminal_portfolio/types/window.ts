@@ -7,6 +7,7 @@ export type ProjectWindowState = {
   x: number;
   y: number;
   z: number;
+  minimized: boolean;
 };
 
 export type ContactWindowState = {
@@ -15,6 +16,16 @@ export type ContactWindowState = {
   x: number;
   y: number;
   z: number;
+  minimized: boolean;
 };
 
-export type WindowState = ProjectWindowState | ContactWindowState;
+export type AboutWindowState = {
+  type: "about";
+  id: "about";
+  x: number;
+  y: number;
+  z: number;
+  minimized: boolean;
+};
+
+export type WindowState = ProjectWindowState | ContactWindowState | AboutWindowState;
