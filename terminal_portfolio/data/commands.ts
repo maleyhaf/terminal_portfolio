@@ -13,7 +13,7 @@ const commands: readonly Command[] = [
       "System ready.",
       "\u00A0",
       "Welcome to my terminal portfolio!",
-      "This is a simulation of a Windows command prompt.",
+      "This is a simulation of a Windows 95 Desktop.",
       "Type help to see a list of available commands or give clicking help a try.",
       "P.S. This portfolio is best viewed on desktop.",
       "\u00A0",

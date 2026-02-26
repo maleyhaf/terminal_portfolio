@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Maleyha's Terminal Portfolio",
-  description: "A terminal-style portfolio website for Maleyha Fatima, a software developer. ",
+  title: "Maleyha's Window's Portfolio",
+  description: "A windows 95 style portfolio website for Maleyha Fatima, a software developer. ",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
