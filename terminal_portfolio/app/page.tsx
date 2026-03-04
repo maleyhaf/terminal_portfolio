@@ -118,6 +118,8 @@ export default function Home() {
   const [windows, setWindows] = useState<WindowState[]>([]);
   const zIndexCounter = useRef(1); // to manage z-index of windows, so that clicked window comes to front
 
+  // for letting users type by clicking on terminal body to focus input
+  const inputRef = useRef<HTMLInputElement>(null);
 
 
   // for auto scrolling to bottom on new output
@@ -190,7 +192,7 @@ export default function Home() {
       id: project.exe,
       project,
       x: window.innerWidth / 2 - 300,
-      y: window.innerHeight / 2 - 200,
+      y: window.innerHeight / 2 - 250,
     });
   };
 
@@ -230,8 +232,8 @@ export default function Home() {
     );
 
     for (const cmd of sortedCommands) {
-      const regex = new RegExp(`\\b${cmd.text}\\b`, "i");
-      const match = line.match(regex);
+      //const regex = new RegExp(`\\b${cmd.text}\\b`, "i");
+      const match = line.match(cmd.text);
 
 
       if (match) {
@@ -263,24 +265,28 @@ export default function Home() {
     const lower = trimmed.toLowerCase();
 
     // special "clear" command to clear the terminal history
-    if (lower === "clear") {
-      setHistory([]);
+    if (lower === "cls") {
+      setHistory([{
+        command: commands[0].text,
+        o_type: commands[0].o_type,
+        output: commands[0].output,
+      }]);
       return;
     }
 
     // special "run all" command to run all commands in sequence, mainly for demonstration and testing purposes but also for users who just want to see everything without typing it all out
-    if (lower === "run all") {
+    if (lower === "start.bat") {
       const commandsToRun = commands.filter(
         (cmd) =>
-          cmd.text !== "run all" &&
-          cmd.text !== "clear" &&
+          cmd.text !== "start.bat" &&
+          cmd.text !== "cls" &&
           cmd.text !== commands[0].text &&
           cmd.text !== "help" &&
-          cmd.text !== "contact" && // exclude from batch text output
-          cmd.text !== "about" && // exclude from batch text output
-          cmd.text !== "skills -f" &&
-          cmd.text !== "skills -b" &&
-          cmd.text !== "skills -t"
+          cmd.text !== "contact.exe" && // exclude from batch text output
+          cmd.text !== "about.exe" && // exclude from batch text output
+          cmd.text !== "type skills_f.txt" &&
+          cmd.text !== "type skills_b.txt" &&
+          cmd.text !== "type skills_t.txt"
       );
 
       setHistory((prev) => [
@@ -299,12 +305,12 @@ export default function Home() {
         setHistory((prev) => [
           ...prev,
           {
-            command: "about",
+            command: "about.exe",
             o_type: "text",
             output: ["Opening about.exe..."],
           },
           {
-            command: "contact",
+            command: "contact.exe",
             o_type: "text",
             output: ["Opening contact.exe..."],
           },
@@ -320,7 +326,7 @@ export default function Home() {
     }
 
     // check for the about command to open the about window
-    if (lower === "about") {
+    if (lower === "about.exe") {
       openAbout();
 
       setHistory(prev => [
@@ -336,7 +342,7 @@ export default function Home() {
     }
 
     // check for the contact command to open the contact window
-    if (lower === "contact") {
+    if (lower === "contact.exe") {
       openContact();
 
       setHistory(prev => [
@@ -351,18 +357,12 @@ export default function Home() {
       return;
     }
 
-    // Check for run <project>.exe
-    if (lower.startsWith("run ")) {
-      const exeName = lower.replace("run ", "").trim();
-
-      const project = projects.find(
-        (p) => p.exe.toLowerCase() === exeName
-      );
-
+    // Check for ./project.exe
+    if (lower.endsWith(".exe")) {
+      const project = projects.find(p => p.exe.toLowerCase() === lower);
+      console.log(lower, projects.map(p => p.exe.toLowerCase()))
       if (project) {
         openProject(project);
-
-        // if found
         setHistory((prev) => [
           ...prev,
           {
@@ -374,13 +374,12 @@ export default function Home() {
         return;
       }
 
-      // if not found
       setHistory((prev) => [
         ...prev,
         {
           command: trimmed,
           o_type: "text",
-          output: [`'${trimmed}' is not recognized as a project.`],
+          output: [`Bad command or file name`], // classic DOS error message
         },
       ]);
 
@@ -405,29 +404,27 @@ export default function Home() {
     ]);
   };
 
-
-
-  // handles enter key press in the input to run the command
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return;
     runCommand(input);
     setInput("");
   };
 
-
   return (
     <>
 
       <main
         className="terminal-root"
+        onMouseDown={() => {
+          zIndexCounter.current += 1;
+          setTerminalZ(zIndexCounter.current);
+        }}
       >
         <div
           className="terminal-window"
           style={{ zIndex: terminalZ }}
-          onMouseDown={() => {
-            zIndexCounter.current += 1;
-            setTerminalZ(zIndexCounter.current);
-          }}
+          onClick={() => inputRef.current?.focus()}
+
         >
           {/* Title bar */}
           <div className="terminal-titlebar">
@@ -440,7 +437,7 @@ export default function Home() {
           </div>
 
           {/* Terminal body */}
-          <div ref={terminalBodyRef} className="terminal-body">
+          <div ref={terminalBodyRef} className="terminal-body" >
             {/* Intro command */}
             {!terminalReady && (
               <p>
@@ -493,14 +490,21 @@ export default function Home() {
                       })}
                     </div>
                   ) : item.o_type === "projects" ? (
-                    <div className="flex flex-col gap-1">
-                      {projects.map((project, j) => (
-                        <ClickableCommand
-                          key={j}
-                          text={project.exe}
-                          onClick={() => runCommand(`run ${project.exe}`)}
-                        />
-                      ))}
+                    <div style={{ fontFamily: "'Courier New', monospace", fontSize: "0.85rem" }}>
+                      <div style={{ marginBottom: "4px" }}> Volume in drive C is PORTFOLIO</div>
+                      <div style={{ marginBottom: "8px" }}> Directory of C:\Projects</div>
+                      <div className="terminal-projects-grid">
+                        {projects.map((project, j) => (
+                          <ClickableCommand
+                            key={j}
+                            text={`[${project.exe}]`}
+                            onClick={() => runCommand(`./${project.exe}`)}
+                          />
+                        ))}
+                      </div>
+                      <div style={{ marginTop: "8px" }}>
+                        {projects.length} File(s)
+                      </div>
                     </div>
                   ) : (
                     item.output.map((line, j) => (
@@ -518,6 +522,7 @@ export default function Home() {
               <p className="flex items-center relative">
                 <span className="terminal-prompt">C:\&gt;</span>
                 <input
+                  ref={inputRef}
                   className="terminal-input"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}

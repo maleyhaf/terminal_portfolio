@@ -6,7 +6,7 @@ type Command = {
 
 const commands: readonly Command[] = [
   {
-    text: "run maleyha's_portfolio.exe",
+    text: "./maleyha's_portfolio.exe",
     o_type: "text",
     output: [
       "Preparing portfolio...",
@@ -17,7 +17,7 @@ const commands: readonly Command[] = [
       "Type help to see a list of available commands or give clicking help a try.",
       "P.S. This portfolio is best viewed on desktop.",
       "\u00A0",
-      "Hint: try running 'run all' to see everything at once.",
+      "Hint: try running 'start.bat' to see everything at once.",
     ],
   },
   {
@@ -25,27 +25,28 @@ const commands: readonly Command[] = [
     o_type: "text",
     output: [
       "Available commands:",
-      "about - Displays information about me.",
-      "education - Displays my education.",
-      "projects - Displays my projects.",
-      "skills - Displays my skills.",
-      "    skills -f - My frontend skills.",
-      "    skills -b - My backend skills.",
-      "    skills -t - My tools.",
-      "contact - Displays my contact information.",
-      "clear - Cleans the terminal.",
-      "run all - Executes all main commands in sequence.",
+      "\u00A0",
+      "about.exe - Displays information about me.",
+      "type education.txt - Displays my education.",
+      "dir C:\Projects /w - Displays my projects.",
+      "type skills.txt - Displays my skills.",
+      "    type skills_f.txt - My frontend skills.",
+      "    type skills_b.txt - My backend skills.",
+      "    type skills_t.txt - My tools.",
+      "contact.exe - Displays my contact information.",
+      "cls - Cleans the terminal.",
+      "start.bat - Executes all main commands in sequence.",
     ],
   },
   {
-    text: "about",
+    text: "about.exe",
     o_type: "text",
     output: [
       "Opening about.exe...",
     ],
   },
   {
-    text: "education",
+    text: "type education.txt",
     o_type: "text",
     output: [
       "University of Guelph",
@@ -56,7 +57,7 @@ const commands: readonly Command[] = [
     ],
   },
   {
-    text: "skills",
+    text: "type skills.txt",
     o_type: "skills",
     output: [
       // Languages
@@ -91,7 +92,7 @@ const commands: readonly Command[] = [
     ],
   },
   {
-    text: "skills -f",
+    text: "type skills_f.txt",
     o_type: "skills",
     output: [
       // Frontend Skills
@@ -105,7 +106,7 @@ const commands: readonly Command[] = [
     ],
   },
   {
-    text: "skills -b",
+    text: "type skills_b.txt",
     o_type: "skills",
     output: [
       // Backend Skills
@@ -121,7 +122,7 @@ const commands: readonly Command[] = [
     ],
   },
   {
-    text: "skills -t",
+    text: "type skills_t.txt",
     o_type: "skills",
     output: [
       // Tools & Libraries
@@ -138,7 +139,7 @@ const commands: readonly Command[] = [
   },
 
   {
-    text: "contact",
+    text: "contact.exe",
     o_type: "projects",
     output: [
       "Opening contact.exe...",
@@ -146,13 +147,13 @@ const commands: readonly Command[] = [
   },
 
   {
-    text: "clear",
+    text: "cls",
     o_type: "text",
     output: [],
   },
 
   {
-    text: "run all",
+    text: "start.bat",
     o_type: "text",
     output: [
       "Executing all commands...",
@@ -161,7 +162,7 @@ const commands: readonly Command[] = [
   },
 
   {
-    text: "projects",
+    text: "dir C:\Projects /w",
     o_type: "projects",
     output: [
       "Directory of C:\Projects",

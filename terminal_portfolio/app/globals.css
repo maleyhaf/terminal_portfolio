@@ -232,10 +232,10 @@ body {
 .terminal-clickable-command {
   color: #00ff9c;
   cursor: pointer;
-  text-decoration: underline;
 }
 
 .terminal-clickable-command:hover {
+  text-decoration: underline;
   opacity: 0.8;
 }
 
@@ -265,6 +265,7 @@ body {
   flex-direction: column;
 
   pointer-events: auto;
+   
 }
 
 /* Title bar */
@@ -330,6 +331,8 @@ body {
   font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
   font-size: 0.85rem;
   line-height: 1.4;
+  max-height: 70vh; 
+  overflow-y: auto;  
 }
 
 /* Demo button */
@@ -380,6 +383,28 @@ body {
 
 .project-skill-icons i {
   font-size: 36px;
+}
+
+.terminal-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px 0;
+  font-family: "Courier New", monospace;
+  font-size: 0.85rem;
+}
+
+.terminal-projects-grid .terminal-clickable-command {
+  display: block;
+  padding-right: 16px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.terminal-projects-grid .terminal-clickable-command:hover {
+  text-decoration: underline;
 }
 
 /* contact section */
