@@ -359,7 +359,8 @@ export default function Home() {
 
     // Check for ./project.exe
     if (lower.endsWith(".exe")) {
-      const project = projects.find(p => p.exe.toLowerCase() === lower);
+      const exeName = lower.startsWith("./") ? lower.slice(2) : lower;
+      const project = projects.find(p => p.exe.toLowerCase() === exeName);
       console.log(lower, projects.map(p => p.exe.toLowerCase()))
       if (project) {
         openProject(project);
