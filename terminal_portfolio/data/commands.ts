@@ -6,7 +6,7 @@ type Command = {
 
 const commands: readonly Command[] = [
   {
-    text: "./maleyha's_portfolio.exe",
+    text: "maleyha's_portfolio.exe",
     o_type: "text",
     output: [
       "Preparing portfolio...",
