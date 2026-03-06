@@ -27,7 +27,7 @@ export default function Taskbar({ windows, onClickItem, onAbout }: Props) {
     { id: "terminal", label: "C:\\terminal.exe" },
     ...windows.map(w => ({
       id: w.id,
-      label: w.type === "project" ? w.project.exe : w.type === "contact" ? "contact.exe" : "about.exe",
+      label: w.type === "project" ? w.project.exe : w.type === "experience" ? w.job.exe : w.type === "contact" ? "contact.exe" : "about.exe",
     })),
   ];
 

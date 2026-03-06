@@ -87,7 +87,7 @@ export default function AboutWindow({ windowState, onMove, onFocus, onMinimize }
             >
                 {/* Title Bar */}
                 <div className="project-titlebar">
-                    <span>about.exe</span>
+                    <span>C:\about.exe</span>
                     <div className="project-controls">
                         <div className="project-button" onClick={onMinimize}>_</div>
                         <div className="project-button">□</div>

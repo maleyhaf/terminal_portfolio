@@ -80,7 +80,7 @@ export default function ContactWindow({
             >
                 {/* Title Bar */}
                 <div className="project-titlebar" onMouseDown={onFocus}>
-                    <span>contact.exe</span>
+                    <span>C:\contact.exe</span>
 
                     <div className="project-controls">
                         <div className="project-button" onClick={onMinimize}>_</div>

@@ -16,30 +16,7 @@ export type Project = {
 
 const projects: Project[] = [
 
-    {
-        exe: "cognitive.exe",
-        title: "Cognitive Systems Work Term",
-        description: "Embedded Systems Research Developer — AUTUMN Testing Tool",
-        overview:
-            "Developed AUTUMN, a Python-based testing framework for evaluating Wi-Fi sensing algorithms at Cognitive Systems Corp.",
-        details: [
-            "Designed and developed AUTUMN testing framework in Python",
-            "Analyzed and optimized large-scale data pipelines",
-            "Evaluated proprietary Wi-Fi motion-sensing algorithms",
-            "Produced maintainable technical documentation",
-            "Applied agile milestone tracking practices",
-        ],
-        tech: [
-            "Python",
-            "Software Architecture",
-            "Data Pipelines",
-            "Algorithm Analysis",
-            "Agile Development"
-        ],
-        iconSkills: ["python", "c","linux", "git"],
-        image: "/assets/Cognitive_logo.jpg",
-        companyUrl: "https://www.cognitivesystems.com/",
-    },
+    
 
     {
         exe: "mathaid.exe",

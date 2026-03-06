@@ -39,7 +39,7 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
 
                 {/* Title Bar */}
                 <div className="project-titlebar" onMouseDown={onFocus}>
-                    <span>{windowState.project.exe}</span>
+                    <span>C:\Projects\{windowState.project.exe}</span>
 
                     <div className="project-controls">
                         <div className="project-button" onClick={onMinimize}>_</div>
@@ -89,6 +89,7 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
                             ))}
                         </ul>
                     )}
+
 
                     {/* Devicon Skill Icons */}
                     {windowState.project.iconSkills && (

@@ -1,3 +1,4 @@
+import { Experience } from "@/data/experience";
 import { Project } from "../data/projects";
 
 export type ProjectWindowState = {
@@ -28,4 +29,14 @@ export type AboutWindowState = {
   minimized: boolean;
 };
 
-export type WindowState = ProjectWindowState | ContactWindowState | AboutWindowState;
+export type ExperienceWindowState = {
+  type: "experience";
+  id: string;
+  job: Experience;
+  x: number;
+  y: number;
+  z: number;
+  minimized: boolean;
+};
+
+export type WindowState = ProjectWindowState | ContactWindowState | AboutWindowState | ExperienceWindowState;

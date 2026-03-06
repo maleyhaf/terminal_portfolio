@@ -704,3 +704,71 @@ body {
   user-select: none;
   transition: left 0.03s linear;
 }
+
+.experience-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.experience-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.experience-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.experience-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+  padding: 2px;
+  background: #fff;
+}
+
+.experience-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.experience-title {
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.experience-company {
+  font-size: 0.8rem;
+  color: #333;
+}
+
+.experience-date {
+  font-size: 0.75rem;
+  font-family: "Courier New", monospace;
+  color: #555;
+}
+
+.experience-description {
+  margin: 4px 0 0 0;
+  padding-left: 16px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.experience-divider {
+  font-family: "Courier New", monospace;
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+}

@@ -1,6 +1,6 @@
 type Command = {
   text: string;
-  o_type: "text" | "skills" | "projects";
+  o_type: "text" | "skills" | "projects" | "experience";
   output: string[];
 };
 
@@ -28,6 +28,7 @@ const commands: readonly Command[] = [
       "\u00A0",
       "about.exe - Displays information about me.",
       "type education.txt - Displays my education.",
+      "dir C:\Experience /w - Displays my experience.",
       "dir C:\Projects /w - Displays my projects.",
       "type skills.txt - Displays my skills.",
       "    type skills_f.txt - My frontend skills.",
@@ -172,6 +173,18 @@ const commands: readonly Command[] = [
       "\u00A0",
       "Use: run <filename>.exe"
     ],
+  },
+
+  {
+    text: "dir C:\Experience /w",
+    o_type: "experience",
+    output: [
+      "Directory of C:\Experience",
+      "\u00A0",
+      "experience.txt",
+      "\u00A0",
+      "Use: type <filename>"
+    ]
   }
 
 ];

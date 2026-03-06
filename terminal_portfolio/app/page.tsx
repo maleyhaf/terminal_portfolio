@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import commands from "../data/commands";
 import projects, { Project } from "../data/projects";
+import experience, { Experience } from "../data/experience";
 import { WindowState } from "../types/window";
 import { ProjectWindowState } from "../types/window";
 import { ContactWindowState } from "../types/window";
@@ -10,6 +11,8 @@ import { AboutWindowState } from "../types/window";
 import ProjectWindow from "../components/ProjectWindow";
 import ContactWindow from "../components/ContactWindow";
 import AboutWindow from "../components/AboutWindow";
+import ExperienceWindow from "../components/ExperienceWindow";
+import { ExperienceWindowState } from "../types/window";
 import Taskbar from "../components/Taskbar";
 
 import style from "styled-jsx/style";
@@ -18,7 +21,7 @@ import { i } from "framer-motion/client";
 
 
 /* ---------- Types ---------- */
-type OutputType = "text" | "skills" | "projects";
+type OutputType = "text" | "skills" | "projects" | "experience";
 
 type HistoryItem = {
   command: string;
@@ -139,7 +142,7 @@ export default function Home() {
   }, []);
 
   // WINDOW MANAGEMENT
-  const openWindow = (win: Omit<ProjectWindowState, "z" | "minimized"> | Omit<ContactWindowState, "z" | "minimized"> | Omit<AboutWindowState, "z" | "minimized">) => {
+  const openWindow = (win: Omit<ProjectWindowState, "z" | "minimized"> | Omit<ContactWindowState, "z" | "minimized"> | Omit<AboutWindowState, "z" | "minimized"> | Omit<ExperienceWindowState, "z" | "minimized">) => {
     zIndexCounter.current += 1;
     const newZ = zIndexCounter.current;
 
@@ -203,6 +206,17 @@ export default function Home() {
       id: "contact",
       x: window.innerWidth / 2 - 260,
       y: window.innerHeight / 2 - 180,
+    });
+  };
+
+  // for experience window
+  const openExperience = (job: Experience) => {
+    openWindow({
+      type: "experience",
+      id: job.exe,
+      job,
+      x: window.innerWidth / 2 - 290,
+      y: window.innerHeight / 2 - 200,
     });
   };
 
@@ -357,11 +371,12 @@ export default function Home() {
       return;
     }
 
-    // Check for ./project.exe
+    // Check for projct exe or job exe
     if (lower.endsWith(".exe")) {
       const exeName = lower.startsWith("./") ? lower.slice(2) : lower;
       const project = projects.find(p => p.exe.toLowerCase() === exeName);
-      console.log(lower, projects.map(p => p.exe.toLowerCase()))
+      const job = experience.find(j => j.exe.toLowerCase() === exeName);
+      //console.log(lower, projects.map(p => p.exe.toLowerCase()))
       if (project) {
         openProject(project);
         setHistory((prev) => [
@@ -370,6 +385,18 @@ export default function Home() {
             command: trimmed,
             o_type: "text",
             output: [`Running ${project.exe}...`],
+          },
+        ]);
+        return;
+      }
+      if (job) {
+        openExperience(job);
+        setHistory((prev) => [
+          ...prev,
+          {
+            command: trimmed,
+            o_type: "text",
+            output: [`Running ${job.exe}...`],
           },
         ]);
         return;
@@ -499,12 +526,29 @@ export default function Home() {
                           <ClickableCommand
                             key={j}
                             text={`[${project.exe}]`}
-                            onClick={() => runCommand(`./${project.exe}`)}
+                            onClick={() => runCommand(`${project.exe}`)}
                           />
                         ))}
                       </div>
                       <div style={{ marginTop: "8px" }}>
                         {projects.length} File(s)
+                      </div>
+                    </div>
+                  ) : item.o_type === "experience" ? (
+                    <div style={{ fontFamily: "'Courier New', monospace", fontSize: "0.85rem" }}>
+                      <div style={{ marginBottom: "4px" }}> Volume in drive C is PORTFOLIO</div>
+                      <div style={{ marginBottom: "8px" }}> Directory of C:\Experience</div>
+                      <div className="terminal-projects-grid">
+                        {experience.map((job, j) => (
+                          <ClickableCommand
+                            key={j}
+                            text={`[${job.exe}]`}
+                            onClick={() => runCommand(`${job.exe}`)}
+                          />
+                        ))}
+                      </div>
+                      <div style={{ marginTop: "8px" }}>
+                        {experience.length} File(s)
                       </div>
                     </div>
                   ) : (
@@ -580,6 +624,19 @@ export default function Home() {
               index={index}
               windowState={win}
               onMove={(x, y) => setWindows(prev => prev.map(w => w.id === win.id ? { ...w, x, y } : w))}
+              onFocus={() => focusWindow(win.id)}
+              onMinimize={() => minimizeWindow(win.id)}
+            />
+          );
+        }
+        if (win.type === "experience") {
+          return (
+            <ExperienceWindow
+              key={win.id}
+              index={index}
+              windowState={win as ExperienceWindowState}
+              onMove={(x, y) => setWindows(prev => prev.map(w => w.id === win.id ? { ...w, x, y } : w))}
+              onClose={() => closeWindow(win.id)}
               onFocus={() => focusWindow(win.id)}
               onMinimize={() => minimizeWindow(win.id)}
             />
