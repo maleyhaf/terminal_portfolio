@@ -373,10 +373,10 @@ export default function Home() {
 
     // Check for projct exe or job exe
     if (lower.endsWith(".exe")) {
-      const exeName = lower.startsWith("./") ? lower.slice(2) : lower;
+      const exeName = lower.startsWith("experience\\") ? lower.slice(11) : lower.startsWith("projects\\") ? lower.slice(9) : lower;
       const project = projects.find(p => p.exe.toLowerCase() === exeName);
       const job = experience.find(j => j.exe.toLowerCase() === exeName);
-      //console.log(lower, projects.map(p => p.exe.toLowerCase()))
+      console.log(exeName, projects.map(p => p.exe.toLowerCase()))
       if (project) {
         openProject(project);
         setHistory((prev) => [
@@ -526,7 +526,7 @@ export default function Home() {
                           <ClickableCommand
                             key={j}
                             text={`[${project.exe}]`}
-                            onClick={() => runCommand(`${project.exe}`)}
+                            onClick={() => runCommand(`Projects\\${project.exe}`)}
                           />
                         ))}
                       </div>
@@ -543,7 +543,7 @@ export default function Home() {
                           <ClickableCommand
                             key={j}
                             text={`[${job.exe}]`}
-                            onClick={() => runCommand(`${job.exe}`)}
+                            onClick={() => runCommand(`Experience\\${job.exe}`)}
                           />
                         ))}
                       </div>
