@@ -160,7 +160,7 @@ export default function ContactWindow({
                             className="contact-link"
                             onClick={() =>
                                 window.open(
-                                    "http://linkedin.com/in/maleyha-fatima-4821bb279/",
+                                    "https://www.linkedin.com/in/maleyha-fatima-4821bb279/",
                                     "_blank"
                                 )
                             }
