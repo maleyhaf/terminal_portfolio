@@ -91,23 +91,34 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
                     )}
 
 
-                    {/* Devicon Skill Icons */}
-                    {windowState.project.iconSkills && (
+                    {/* Tech Tags + Devicon Skill Icons */}
+                    {(windowState.project.tech || windowState.project.iconSkills) && (
                         <>
-                            <div style={{ fontWeight: "bold" }}>
+                            <div style={{ fontWeight: "bold", marginBottom: "6px" }}>
                                 Technologies:
                             </div>
 
-                            <div className="project-skill-icons">
-                                {windowState.project.iconSkills.map((skill, i) => (
-                                    <i
-                                        key={i}
-                                        className={`devicon-${skill}-plain ${monoIcons.includes(skill) ? "" : "colored"
-                                            }`}
-                                        title={skill}
-                                    />
-                                ))}
-                            </div>
+                            {/* Tech string tags */}
+                            {windowState.project.tech && (
+                                <div className="project-tech-tags" style={{ marginBottom: "10px" }}>
+                                    {windowState.project.tech.map((t, i) => (
+                                        <span key={i} className="project-tech-tag">{t}</span>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Devicon icons */}
+                            {windowState.project.iconSkills && (
+                                <div className="project-skill-icons">
+                                    {windowState.project.iconSkills.map((skill, i) => (
+                                        <i
+                                            key={i}
+                                            className={`devicon-${skill}-plain ${monoIcons.includes(skill) ? "" : "colored"}`}
+                                            title={skill}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </>
                     )}
 

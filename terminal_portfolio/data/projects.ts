@@ -16,7 +16,7 @@ export type Project = {
 
 const projects: Project[] = [
 
-    
+
 
     {
         exe: "mathaid.exe",
@@ -34,6 +34,25 @@ const projects: Project[] = [
         iconSkills: ["python", "flask", "javascript", "html5", "css3"],
         image: "/assets/mathaid_project.png",
         githubUrl: "https://github.com/maleyhaf/mathAId",
+    },
+
+    {
+        exe: "punkcats.exe",
+        title: "Punk Cats",
+        description: "2D pixel platformer in the browser — street cat, urban levels, eventually a glock",
+        overview:
+            "Terraria-style 2D pixel platformer built with Phaser 3 and Vite. Play as a customizable street cat navigating gritty urban environments, collecting yarn balls for XP, eating fish to heal, brawling with rival cats, and unlocking weapons as you progress through the city.",
+        details: [
+            "Built with Phaser 3 + Vite, running entirely in the browser",
+            "Tiled JSON tilemap system with multi-tileset support and per-layer height offset correction for mixed tile sizes",
+            "Parallax scrolling background using TileSprite with per-layer scroll speeds tied to camera position",
+            "OOP architecture with planned Entity, Player, EnemyCat, Item, and Weapon class hierarchy",
+            "Ground and platform collision via custom tile properties, player spawn from Tiled object layer",
+        ],
+        tech: ["Phaser 3", "JavaScript", "Vite", "Tiled", "OOP"],
+        iconSkills: ["javascript", "html5", "css3"],
+        image: "/assets/punk_cats_intro.png",
+        githubUrl: "https://github.com/maleyhaf/punk_cats",
     },
 
     {
