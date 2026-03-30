@@ -145,7 +145,7 @@ export default function Home() {
     // if on mobile , minimise the about window on load to avoid covering the whole screen
     if (window.innerWidth <= 768) {
       minimizeWindow("about");
-    } 
+    }
   }, []);
 
   // WINDOW MANAGEMENT
@@ -184,53 +184,41 @@ export default function Home() {
     setWindows(prev => prev.map(w => w.id === id ? { ...w, minimized: true } : w));
   };
 
-  // openAbout
-  const openAbout = () => {
+  // to safely get window position with mobile responsiveness taken into account
+  const getPos = (offsetX: number, offsetY: number) => {
+    if (typeof window === "undefined") return { x: 0, y: 0 };
     const isMobile = window.innerWidth <= 768;
-    openWindow({
-      type: "about",
-      id: "about",
-      x: isMobile ? 12 : window.innerWidth - 800,
-      y: isMobile ? 50 : 40,
-    });
+    return {
+      x: isMobile ? 12 : window.innerWidth / 2 + offsetX,
+      y: isMobile ? 50 : window.innerHeight / 2 + offsetY,
+    };
   };
 
-  // for projects
+  // openAbout
+  const openAbout = () => {
+    const { x, y } = getPos(-230, -200);
+    openWindow({ type: "about", id: "about", x, y });
+  };
+
+  // for project windows
   const openProject = (project: Project) => {
-    const isMobile = window.innerWidth <= 768;
-    openWindow({
-      type: "project",
-      id: project.exe,
-      project,
-      x: isMobile ? 12 : window.innerWidth / 2 - 300,
-      y: isMobile ? 50 : window.innerHeight / 2 - 250,
-    });
+    const { x, y } = getPos(-300, -250);
+    openWindow({ type: "project", id: project.exe, project, x, y });
   };
 
   // for contact window
   const openContact = () => {
-    const isMobile = window.innerWidth <= 768;
-    openWindow({
-      type: "contact",
-      id: "contact",
-      x: isMobile ? 12 : window.innerWidth / 2 - 260,
-      y: isMobile ? 50 : window.innerHeight / 2 - 180,
-    });
+    const { x, y } = getPos(-260, -180);
+    openWindow({ type: "contact", id: "contact", x, y });
   };
 
-  // for experience window
-  // openExperience
+  // for experience windows
   const openExperience = (job: Experience) => {
-    const isMobile = window.innerWidth <= 768;
-    openWindow({
-      type: "experience",
-      id: job.exe,
-      job,
-      x: isMobile ? 12 : window.innerWidth / 2 - 290,
-      y: isMobile ? 50 : window.innerHeight / 2 - 200,
-    });
+    const { x, y } = getPos(-290, -200);
+    openWindow({ type: "experience", id: job.exe, job, x, y });
   };
 
+  // focus function to bring window to front on click
   const focusWindow = (id: string) => {
     zIndexCounter.current += 1;
     const newZ = zIndexCounter.current;
