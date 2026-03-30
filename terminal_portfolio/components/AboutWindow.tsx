@@ -89,7 +89,11 @@ export default function AboutWindow({ windowState, onMove, onFocus, onMinimize }
                 <div className="project-titlebar">
                     <span>C:\about.exe</span>
                     <div className="project-controls">
-                        <div className="project-button" onClick={onMinimize}>_</div>
+                        <div
+                            className="project-button"
+                            onMouseDown={e => e.stopPropagation()}
+                            onClick={onMinimize}
+                        >_</div>
                         <div className="project-button">□</div>
                     </div>
                 </div>

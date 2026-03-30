@@ -142,6 +142,10 @@ export default function Home() {
   // open about window on initial load
   useEffect(() => {
     openAbout();
+    // if on mobile , minimise the about window on load to avoid covering the whole screen
+    if (window.innerWidth <= 768) {
+      minimizeWindow("about");
+    } 
   }, []);
 
   // WINDOW MANAGEMENT
@@ -186,7 +190,7 @@ export default function Home() {
     openWindow({
       type: "about",
       id: "about",
-      x: isMobile ? 12 : window.innerWidth - 600,
+      x: isMobile ? 12 : window.innerWidth - 800,
       y: isMobile ? 50 : 40,
     });
   };

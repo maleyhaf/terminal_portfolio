@@ -40,14 +40,17 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
                     <span>C:\Projects\{windowState.project.exe}</span>
 
                     <div className="project-controls">
-                        <div className="project-button" onClick={onMinimize}>_</div>
+                        <div
+                            className="project-button"
+                            onMouseDown={e => e.stopPropagation()}
+                            onClick={onMinimize}
+                        >_</div>
                         <div className="project-button">□</div>
                         <div
                             className="project-button"
+                            onMouseDown={e => e.stopPropagation()}
                             onClick={onClose}
-                        >
-                            ×
-                        </div>
+                        >×</div>
                     </div>
                 </div>
 

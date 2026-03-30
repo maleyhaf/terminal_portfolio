@@ -29,16 +29,24 @@ export default function ExperienceWindow({ windowState, onMove, onClose, onFocus
       <div
         ref={nodeRef}
         className="project-window"
-        style={{ zIndex: windowState.z, width: 580, position: "fixed", top: 0 }}
+        style={{ zIndex: windowState.z }}
         onMouseDownCapture={onFocus}
       >
         {/* Title Bar */}
         <div className="project-titlebar">
           <span>C:\Experience\{job.exe}</span>
           <div className="project-controls">
-            <div className="project-button" onClick={onMinimize}>_</div>
+            <div
+              className="project-button"
+              onMouseDown={e => e.stopPropagation()}
+              onClick={onMinimize}
+            >_</div>
             <div className="project-button">□</div>
-            <div className="project-button" onClick={onClose}>×</div>
+            <div
+              className="project-button"
+              onMouseDown={e => e.stopPropagation()}
+              onClick={onClose}
+            >×</div>
           </div>
         </div>
 
@@ -48,12 +56,12 @@ export default function ExperienceWindow({ windowState, onMove, onClose, onFocus
 
             <div className="experience-header">
               {job.logo && (
-                 <img
-                            src={job.logo}
-                            alt={job.company}
-                            className="project-image"
-                            width={200}
-                        />
+                <img
+                  src={job.logo}
+                  alt={job.company}
+                  className="project-image"
+                  width={200}
+                />
               )}
               <div className="experience-meta">
                 <div className="experience-title">{job.title}</div>
@@ -82,14 +90,14 @@ export default function ExperienceWindow({ windowState, onMove, onClose, onFocus
             )}
 
             {job.companyUrl && (
-                            <button
-                                className="project-demo-button"
-                                onClick={() => window.open(job.companyUrl, "_blank")}
-                                style={{ marginLeft: "8px" }}
-                            >
-                                Company Website
-                            </button>
-                        )}
+              <button
+                className="project-demo-button"
+                onClick={() => window.open(job.companyUrl, "_blank")}
+                style={{ marginLeft: "8px" }}
+              >
+                Company Website
+              </button>
+            )}
           </div>
         </div>
       </div>
