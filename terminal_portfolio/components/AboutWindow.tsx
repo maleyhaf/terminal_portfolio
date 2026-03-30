@@ -82,7 +82,7 @@ export default function AboutWindow({ windowState, onMove, onFocus, onMinimize }
             <div
                 ref={nodeRef}
                 className="project-window"
-                style={{ zIndex: windowState.z, width: 460 }}
+                style={{ zIndex: windowState.z }}
                 onMouseDownCapture={onFocus}
             >
                 {/* Title Bar */}

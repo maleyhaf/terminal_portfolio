@@ -31,8 +31,6 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
                 className="project-window"
                 style={{
                     zIndex: windowState.z,
-                    position: "fixed",
-                    top: 0,
                 }}
                 onMouseDownCapture={onFocus}
             >

@@ -129,6 +129,9 @@ export default function Home() {
   const terminalBodyRef = useRef<HTMLDivElement | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
+  // mobile responsiveness
+  //const isMobile = window.innerWidth <= 768;
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
       behavior: input ? "auto" : "smooth",
@@ -177,46 +180,50 @@ export default function Home() {
     setWindows(prev => prev.map(w => w.id === id ? { ...w, minimized: true } : w));
   };
 
-  //  openAbout:
+  // openAbout
   const openAbout = () => {
+    const isMobile = window.innerWidth <= 768;
     openWindow({
       type: "about",
       id: "about",
-      x: window.innerWidth - 600,
-      y: 40,
+      x: isMobile ? 12 : window.innerWidth - 600,
+      y: isMobile ? 50 : 40,
     });
   };
 
   // for projects
   const openProject = (project: Project) => {
-    // window state type
+    const isMobile = window.innerWidth <= 768;
     openWindow({
       type: "project",
       id: project.exe,
       project,
-      x: window.innerWidth / 2 - 300,
-      y: window.innerHeight / 2 - 250,
+      x: isMobile ? 12 : window.innerWidth / 2 - 300,
+      y: isMobile ? 50 : window.innerHeight / 2 - 250,
     });
   };
 
   // for contact window
   const openContact = () => {
+    const isMobile = window.innerWidth <= 768;
     openWindow({
       type: "contact",
       id: "contact",
-      x: window.innerWidth / 2 - 260,
-      y: window.innerHeight / 2 - 180,
+      x: isMobile ? 12 : window.innerWidth / 2 - 260,
+      y: isMobile ? 50 : window.innerHeight / 2 - 180,
     });
   };
 
   // for experience window
+  // openExperience
   const openExperience = (job: Experience) => {
+    const isMobile = window.innerWidth <= 768;
     openWindow({
       type: "experience",
       id: job.exe,
       job,
-      x: window.innerWidth / 2 - 290,
-      y: window.innerHeight / 2 - 200,
+      x: isMobile ? 12 : window.innerWidth / 2 - 290,
+      y: isMobile ? 50 : window.innerHeight / 2 - 200,
     });
   };
 

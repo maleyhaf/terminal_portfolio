@@ -73,8 +73,6 @@ export default function ContactWindow({
                 className="project-window"
                 style={{
                     zIndex: windowState.z,
-                    top: 0,
-                    width: 520, // Smaller width for contact window
                 }}
                 onMouseDownCapture={onFocus}
             >
