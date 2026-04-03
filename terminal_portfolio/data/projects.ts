@@ -70,7 +70,7 @@ const projects: Project[] = [
             "Applied smoothing (interpolation) to prevent abrupt state transitions and ensure stable adaptive feedback loops",
             "Generated post-session analytics reports summarizing behavioral patterns and system responses",
         ],
-        tech: ["React", "TypeScript", "Vite", "Canvas API", "Adaptive Systems", "Real-Time Data Processing"],
+        tech: ["React", "TypeScript", "Vite", "Canvas API", "Machine Learning", "Adaptive Systems", "Real-Time Data Processing"],
         iconSkills: ["react", "typescript", "javascript", "html5", "css3"],
         image: "/assets/behavioros_project.png",
         demoUrl: "https://behavior-os.vercel.app/",
