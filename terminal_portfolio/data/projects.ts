@@ -56,6 +56,28 @@ const projects: Project[] = [
     },
 
     {
+        exe: "behavioros.exe",
+        title: "BehaviorOS Adaptive ML Game Engine",
+        description: "Real-time behavior modeling engine that dynamically adapts gameplay using player-driven signals",
+        overview:
+            "An event-driven, real-time adaptive game engine that models player decision-making patterns and continuously updates gameplay parameters through a lightweight reinforcement-style system.",
+        details: [
+            "Engineered real-time game loop with React, TypeScript, and Canvas for low-latency state updates",
+            "Built player modeling pipeline extracting features like impulsivity, risk tolerance, patience, consistency, and performance",
+            "Implemented adaptive decision engine using rule-based + reinforcement-style updates to dynamically tune difficulty",
+            "Designed continuous difficulty scaling combining time-based pressure with performance-weighted modulation",
+            "Developed event-stream processing system capturing reaction times, accuracy, and behavioral trends",
+            "Applied smoothing (interpolation) to prevent abrupt state transitions and ensure stable adaptive feedback loops",
+            "Generated post-session analytics reports summarizing behavioral patterns and system responses",
+        ],
+        tech: ["React", "TypeScript", "Vite", "Canvas API", "Adaptive Systems", "Real-Time Data Processing"],
+        iconSkills: ["react", "typescript", "javascript", "html5", "css3"],
+        image: "/assets/behavioros_project.png",
+        demoUrl: "https://behavior-os.vercel.app/",
+        githubUrl: "https://github.com/maleyhaf/BehaviorOS",
+    },
+
+    {
         exe: "billiards.exe",
         title: "Billiards Game",
         description: "Physics-based full-stack billiards game",
