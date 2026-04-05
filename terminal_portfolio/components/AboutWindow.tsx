@@ -118,21 +118,21 @@ export default function AboutWindow({ windowState, onMove, onFocus, onMinimize }
                     <div className="about-section">
                         <div className="about-section-title">// bio</div>
                         <p>
-                            I enjoy building things that feel solid, intuitive, and thoughtfully engineered. I care deeply about structure and clarity, and I like working in codebases where design decisions matter and everything has a clear purpose.
+                            I am a Software Engineering student focused on building reliable, well-structured systems and intuitive user experiences. I enjoy creating applications that are not only functional, but thoughtfully designed with clarity, performance, and maintainability in mind.
                         </p>
                     </div>
 
                     <div className="about-section">
                         <div className="about-section-title">// how i think</div>
                         <p>
-                            As a forth-year Software Engineering student, I'm especially drawn to backend development and complex systems. I enjoy breaking down complicated problems, working through edge cases, and building efficient, reliable solutions where small details can have a big impact.
+                            I approach problems with a strong focus on structure and scalability. I enjoy breaking down complex requirements, identifying edge cases, and designing solutions that remain robust under real-world conditions. My interests are primarily in backend development and system design, with growing experience in real-time applications and data-driven features.
                         </p>
                     </div>
 
                     <div className="about-section">
                         <div className="about-section-title">// what i bring</div>
                         <p>
-                            I'm always open to learning new technologies and expanding my technical skill set. The fast pace of the tech world excites me — each new language, tool, or concept feels like another step toward becoming a stronger, more adaptable developer who values growth, creativity, and collaboration.
+                            I bring a balance of technical skill, adaptability, and attention to detail. I am comfortable working across the stack and enjoy collaborating in team environments where clear communication and thoughtful design decisions matter. I am always looking to expand my skill set and contribute to building software that is both impactful and dependable.
                         </p>
                     </div>
 
