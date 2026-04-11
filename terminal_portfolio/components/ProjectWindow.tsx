@@ -61,35 +61,24 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
                         {windowState.project.title}
                     </div>
 
-                    {/* Pixel Image */}
-                    {windowState.project.image && (
-                        <img
-                            src={windowState.project.image}
-                            alt={windowState.project.title}
-                            className="project-image"
-                            width={200}
-                        />
-                    )}
+                    <div style={{ marginBottom: "20px" }}>
+                        {/* Pixel Image */}
+                        {windowState.project.image && (
+                            <img
+                                src={windowState.project.image}
+                                alt={windowState.project.title}
+                                className="project-image"
+                                width={200}
+                            />
+                        )}
 
-                    <div style={{ marginBottom: "10px" }}>
-                        {windowState.project.description}
+                        <div style={{ marginBottom: "10px" }}>
+                            {windowState.project.description}
+                        </div>
                     </div>
 
-                    {/* Extended Overview */}
-                    {windowState.project.overview && (
-                        <div style={{ marginBottom: "10px" }}>
-                            {windowState.project.overview}
-                        </div>
-                    )}
 
-                    {/* Bullet Details */}
-                    {windowState.project.details && (
-                        <ul style={{ marginBottom: "12px" }}>
-                            {windowState.project.details.map((d, i) => (
-                                <li key={i}>{d}</li>
-                            ))}
-                        </ul>
-                    )}
+
 
 
                     {/* Tech Tags + Devicon Skill Icons */}
@@ -110,7 +99,7 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
 
                             {/* Devicon icons */}
                             {windowState.project.iconSkills && (
-                                <div className="project-skill-icons">
+                                <div className="project-skill-icons" style={{ marginBottom: "20px" }}>
                                     {windowState.project.iconSkills.map((skill, i) => (
                                         <i
                                             key={i}
@@ -122,6 +111,27 @@ export default function ProjectWindow({ index, windowState, onMove, onClose, onF
                             )}
                         </>
                     )}
+
+
+                    {/* Extended Overview */}
+                    <div style={{ fontWeight: "bold", marginBottom: "6px" }}>
+                        Details:
+                    </div>
+                    {windowState.project.overview && (
+                        <div style={{ marginBottom: "10px" }}>
+                            {windowState.project.overview}
+                        </div>
+                    )}
+
+                    {/* Bullet Details */}
+                    {windowState.project.details && (
+                        <ul style={{ marginBottom: "12px" }}>
+                            {windowState.project.details.map((d, i) => (
+                                <li key={i}>{d}</li>
+                            ))}
+                        </ul>
+                    )}
+
 
                     {/* Buttons */}
                     <div style={{ marginTop: "10px" }}>
