@@ -78,6 +78,26 @@ const projects: Project[] = [
     },
 
     {
+        exe: "dayflow.exe",
+        title: "DayFlow",
+        description: "Personal planner and calendar app with Google Calendar sync and drag and drop scheduling",
+        overview:
+            "A full-featured weekly and monthly planner built with React and TypeScript. Drag and drop events across time slots with live 15-minute snapping, edit everything inline in a single modal, organize by category, and sync two ways with Google Calendar through the Anthropic MCP connector.",
+        details: [
+            "Built week and month calendar views from scratch with no date libraries, all custom date math",
+            "Implemented HTML5 drag and drop with a custom ghost chip that tracks the cursor and shows live snapped time during drag",
+            "Wired Google Calendar two-way sync via Anthropic API with Google Calendar MCP server",
+            "Managed all app state with useReducer and localStorage persistence, no external state library",
+            "Built a full CSS custom property theming system with 4 presets, custom hex input, and dark mode",
+        ],
+        tech: ["React", "TypeScript", "CSS Modules", "Google Calendar API", "Anthropic MCP"],
+        iconSkills: ["react", "typescript", "css3", "html5"],
+        image: "/assets/dayflow_project.png",
+        demoUrl: "https://dayflow-fawn.vercel.app/",
+        githubUrl: "https://github.com/maleyhaf/dayflow",
+    },
+
+    {
         exe: "billiards.exe",
         title: "Billiards Game",
         description: "Physics-based full-stack billiards game",
